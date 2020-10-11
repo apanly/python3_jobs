@@ -33,7 +33,17 @@ class MenuServiceService( BaseService):
                 "title" :"仪表盘",
                 "icon" : "dashboard",
                 "sub" : [
-                    { "title" : "首页","url":"/" }
+                    { "title" : "首页","url":"/" },
+                    { "title" : "更新记录","url":"/release" },
+                ]
+            },
+            "job" : {
+                "title": "Job管理",
+                "icon": "list",
+                "sub": [
+                    {"title": "Job列表", "url": "/job/index/index"},
+                    {"title": "服务器", "url": "/job/server/index"},
+                    {"title": "Job工具", "url": "/job/tools/index"},
                 ]
             },
             "link": {

@@ -22,9 +22,16 @@ class CommonConstant(BaseService):
     ## 如果使用cookie登录，可以用这个作为cookie的name，即学即码
     AUTH_COOKIE_NAME = "learn_master"
 
+    special_char = "@@@"
+    special_strike = "-"
+
     default_status_false = 0
     default_status_true = 1
     default_status_neg_99 = -99
+    default_status_neg_1 = -1
+    default_status_neg_2 = -2
+    default_status_pos_2 = 2
+    default_status_pos_3 = 3
 
     common_status_map = {
         1 : "正常",
@@ -39,6 +46,12 @@ class CommonConstant(BaseService):
     common_status_map3 = {
         1: "已读",
         0: "未读"
+    }
+
+    common_status_map4 = {
+        1: "处理成功",
+        0: "处理失败",
+        -2 : "待处理"
     }
 
     link_type_map = {
@@ -62,5 +75,29 @@ class CommonConstant(BaseService):
             "title": "其他",
             "class": "info"
         }
+    }
+
+
+    server_env_map = {
+        1: "python",
+        2: "php72"
+    }
+
+    job_type_map = {
+        1: "周期性",
+        2: "常驻",
+        3: "一次性"
+    }
+
+    run_status_map = {
+        1: "等待下次运行",
+        2: "运行中",
+        0: "不调度"
+    }
+
+    job_log_status_map = {
+        -1: "运行中",
+        0: "运行失败",
+        1: "运行成功"
     }
 

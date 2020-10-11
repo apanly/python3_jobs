@@ -85,8 +85,11 @@ var common_ops = {
             var match = /^1[0-9]{10}$/;
             return match.test( param );
         },
-        date:function ( date ) {
-            return /^\d{4}-\d{2}-\d{2}$/.test( date );
+        date:function ( date ,reg ) {
+            if( reg == undefined || !reg ){
+                reg = /^\d{4}-\d{2}-\d{2}$/;
+            }
+            return reg.test( date );
         },
         url:function( url ){
             return /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/.test( url );

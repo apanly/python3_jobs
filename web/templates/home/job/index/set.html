@@ -1,0 +1,198 @@
+{% extends "home/common/layout.html" %}
+
+{% block content %}
+<section class="content">
+    <div class="page-header">
+        <h3>设置Job
+            <span class="text-danger" style="font-size: 16px;">
+            注意： 0:00 -- 2:00 为Outage预留时间，请确保JOB不会在此间运行
+        </span>
+            <a class="pull-right" href="{{ GlobalUrlService.buildHomeUrl('/job/index/index') }}">返回</a>
+        </h3>
+    </div>
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+            <form class="form-horizontal index_set_wrap">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <label  class="col-xs-2 col-md-2 col-lg-2 control-label">名称</label>
+                        <div class="col-xs-10 col-md-10 col-lg-10">
+                            <input type="text" class="form-control" name="name" placeholder="请输入Job的名称，牛逼先从名字开始~~" value="{{ info.name }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <label  class="col-xs-4 col-md-4 col-lg-4 control-label">运行环境</label>
+                        <div class="col-xs-8 col-md-8 col-lg-8">
+                            <select class="form-control" name="env_id">
+                                <option value="0">请选择运行环境</option>
+                                {% for _key,_desc in server_env_map.items() %}
+                                <option {% if _key == info.env_id  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <label  class="col-xs-4 col-md-4 col-lg-4 control-label">运行服务器</label>
+                        <div class="col-xs-8 col-md-8 col-lg-8">
+                            <select class="form-control" name="server_id">
+                                <option value="0">请选择运行服务器</option>
+                                {% for _item in server_list %}
+                                <option disabled data="{{ _item.env }}" {% if _item.id == info.server_id  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}[ {{_item.note}} ]</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <label  class="col-xs-4 col-md-4 col-lg-4 control-label">负责人</label>
+                        <div class="col-xs-8 col-md-8 col-lg-8">
+                            <select class="form-control" name="owner_uid">
+                                <option value="0">请选择Job负责人</option>
+                                {% for _item in user_list %}
+                                <option {% if _item.id == info.owner_uid  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <label  class="col-xs-4 col-md-4 col-lg-4 control-label">相关人</label>
+                        <div class="col-xs-8 col-md-8 col-lg-8">
+                            <select class="form-control" name="relate_uid">
+                                <option value="0">请选择Job相关人</option>
+                                {% for _item in user_list %}
+                                <option {% if _item.id == info.relate_uid  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-md-2 col-lg-2 control-label">运行命令</label>
+                        <div class="col-xs-10 col-md-10 col-lg-10">
+                            <input type="text" class="form-control" name="command" placeholder="请输入Job命令，记住一定要写全路径~~" value="{{ info.command }}">
+                            <label class="control-label">
+                                <span class="text-danger">*</span> 注意: 路径,权限,环境变量,管道/重定向/后台运行等shell问题
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <label  class="col-xs-2 col-md-2 col-lg-2 control-label">类型</label>
+                        <div class="col-xs-6 col-md-6 col-lg-6">
+                            <select class="form-control" name="job_type">
+                                <option value="0">请选择Job类型</option>
+                                {% for _key,_desc in job_type_map.items() %}
+                                <option {% if _key == info.job_type  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <label class="control-label">
+                                <span class="text-danger">*</span> 确定Job类型为了更有效的报警
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <label  class="col-xs-2 col-md-2 col-lg-2 control-label">调度状态</label>
+                        <div class="col-xs-6 col-md-6 col-lg-6">
+                            <select class="form-control" name="status">
+                                {% for _key,_desc in job_status_map.items() %}
+                                <option {% if _key == info.status  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <label class="control-label">
+                                <span class="text-danger">*</span> 可以只是登记，但不会被调度
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <label  class="col-xs-2 col-md-2 col-lg-2 control-label">调度时间</label>
+                        <div class="col-xs-6 col-md-6 col-lg-6">
+                            <input type="text" class="form-control" name="next_run_time" placeholder="请选择调度时间，精确到分钟~~" value="{{ info.next_run_time }}">
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <label class="control-label">
+                                <span class="text-danger">*</span> Job将在指定时间被调度执行
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <label  class="col-xs-2 col-md-2 col-lg-2 control-label">运行间隔</label>
+                        <div class="col-xs-6 col-md-6 col-lg-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="run_interval" placeholder="请输入运行间隔，单位分钟~~" value="{{ info.run_interval }}">
+                                <div class="input-group-addon">分钟</div>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <label class="control-label">
+                                <span class="text-danger">*</span> 调度周期，下次调度间隔
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <label  class="col-xs-2 col-md-2 col-lg-2 control-label">运行时长</label>
+                        <div class="col-xs-6 col-md-6 col-lg-6">
+                            <div class="input-group">
+                                <input type="number" class="form-control" min="0" name="threshold_down" placeholder="请输入最短运行时长，单位分钟~~" value="{{ info.threshold_down }}">
+                                <div class="input-group-addon"> 至 </div>
+                                <input type="number" class="form-control" min="1" name="threshold_up" placeholder="请输入最长运行时长，单位分钟~~" value="{{ info.threshold_up }}">
+                            </div>
+
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <label class="control-label">
+                                <span class="text-danger">*</span> 预计运行时长,过短过长将发出报警
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-md-2 col-lg-2 control-label">备注</label>
+                        <div class="col-xs-10 col-md-10 col-lg-10">
+                            <input type="text" class="form-control" name="note" placeholder="请输入Job备注，方便搜索~~" value="{{ info.note }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-10 col-xs-offset-2 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2">
+                    <input type="hidden" name="id" value="{{ info.id }}">
+                    <button type="button" class="btn btn-block btn-lg btn-primary save pull-right">保存</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{%block js %}
+{% autoescape false %}
+    {{ StaticPluginsHelper.select2() }}
+    {{ StaticPluginsHelper.datetimepicker() }}
+{% endautoescape %}
+<script src="{{ GlobalUrlService.buildWWWStaticUrl('/js/home/job/index/set.js') }}"></script>
+{% endblock %}

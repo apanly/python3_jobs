@@ -375,6 +375,10 @@ body{
     word-break:break-all;
 }
 
+
+.mr-5{
+    margin-right:3rem!important
+}
 form .form-group label.help{
     border-bottom: 1px dashed #6c757d;
     cursor: help;

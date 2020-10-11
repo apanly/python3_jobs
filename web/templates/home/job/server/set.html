@@ -1,0 +1,55 @@
+<div class="modal-dialog server_set_wrap" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close l-close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">设置服务器</h4>
+        </div>
+         <div class="modal-body">
+            <form class="form-horizontal">
+                 <div class="form-group">
+                    <label  class="col-md-2 control-label">名称</label>
+                    <div class="col-md-10">
+                        <input type="text" name="name" class="form-control" value="{{ info.name }}" placeholder="请输入名称~~">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-md-2 control-label">支持环境</label>
+                    <div class="col-md-10">
+                        <select class="form-control" name="env[]" multiple="multiple">
+                            {% for _key,_desc in server_env_map.items() %}
+                                <option value="{{_key}}" {% if _key | string in env_list  %} selected {% endif %}>{{_desc}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-md-2 control-label">备注</label>
+                    <div class="col-md-10">
+                        <input type="text" name="note" class="form-control" value="{{ info.note }}" placeholder="请输入备注~~">
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label  class="col-md-2 control-label">权重</label>
+                    <div class="col-md-10">
+                        <select class="form-control" name="weight">
+                            {% for _key in weight_list %}
+                                <option value="{{_key}}" {% if _key == info.weight  %} selected {% endif %}>{{_key}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+               <div class="form-group hidden">
+                    <div class="col-md-10">
+                        <input type="hidden" name="id" value="{{ info.id }}">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default l-close" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary save">确认</button>
+        </div>
+    </div>
+</div>
+<script src="{{ GlobalUrlService.buildWWWStaticUrl('/js/home/job/server/set.js') }}"></script>

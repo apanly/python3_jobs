@@ -3,30 +3,72 @@
 {% block content %}
 <section class="content">
     <div class="page-header">
-        <h3>仪表盘</h3>
+        <h3>{{ config['APP_NAME'] }}</h3>
+        <h4>{{ config['APP_NAME'] }} 用于管理和调度公司内部的定时任务，并对异常的任务进行报警</h4>
     </div>
     <div class="row">
-        <div class="col-md-12">
-             <div class="panel panel-default">
-            <div class="panel-heading">
-                框架说明
-            </div>
-            <div class="panel-body">
-                    Python在AI,AR VR这块使用越来越广泛。同时在Web方面也有很多成熟的框架。而我本身由于使用
-                    Flask 比较多，个人认为就是比较简单，容易入手，可定制化强。这里我将我经过多个项目多次迭代的
-                    自认为还可以的框架结构整理出来。方便自己可以更容易创建新项目。如果大家喜欢可以也拿去用用
-                    <pre><code>
-* 启动web服务
-    * export ops_config="local|production" && python manage_web.py runserver
-* 启动api服务
-    * export ops_config="local|production" && python manage_api.py runserver
-* 启动Job
-    * export ops_config="local|production" && python manage_job.py runjob -m test
-* 查看Job列表
-    * export ops_config="local|production" && python manage_job.py joblist
-                </code></pre>
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Job统计</h3>
                 </div>
-                <!-- /.card-body -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12">
+                            <div class="col-md-4 col-lg-4 col-xs-12">
+                                <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/index') }}" class="small-box bg-yellow">
+                                    <div class="inner">
+                                        <h1>Job总数</h1>
+                                        <h2>{{ job_count }}</h2>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-bar-chart"></i>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-md-4 col-lg-4 col-xs-12">
+                                <a href="{{ GlobalUrlService.buildHomeUrl('/job/server/index') }}" class="small-box bg-yellow">
+                                    <div class="inner">
+                                        <h1>服务器总数</h1>
+                                        <h2>{{ server_count }}</h2>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-bar-chart"></i>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-md-4 col-lg-4 col-xs-12">
+                                <a href="{{ GlobalUrlService.buildHomeUrl('/job/tools/alert') }}" class="small-box bg-yellow">
+                                    <div class="inner">
+                                        <h1>今日报警</h1>
+                                        <h2>{{ alert_count }}</h2>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-bar-chart"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        使用手册
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <li> 基础支撑：Linux、python3、MySQL</li>
+                        <li> 在Job管理 -> 服务器 添加服务器信息</li>
+                        <li> 在对应的服务器注册服务，执行如下命令 <code>python manage_job.py runjob -m worker -a reg -p ${server_id} </code> 其中${server_id}是第一步中添加服务器信息的ID</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

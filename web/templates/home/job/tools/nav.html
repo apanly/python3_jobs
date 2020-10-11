@@ -1,0 +1,11 @@
+<ul class="nav nav-tabs">
+    <li {% if current == 'index' %} class="active" {% endif %}>
+        <a href="{{ GlobalUrlService.buildHomeUrl('/job/tools/index') }}">运行Job</a>
+    </li>
+    <li {% if current == 'log' %} class="active" {% endif %}>
+        <a href="{{ GlobalUrlService.buildHomeUrl('/job/tools/log') }}">调度日志</a>
+    </li>
+    <li {% if current == 'alert' %} class="active" {% endif %}>
+        <a href="{{ GlobalUrlService.buildHomeUrl('/job/tools/alert') }}">异常日志</a>
+    </li>
+</ul>

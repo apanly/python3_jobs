@@ -19,15 +19,15 @@
                     <table class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>一级模块</th>
-                                    <th>二级模块</th>
+                                    <th width="4%">ID</th>
+                                    <th width="8%">一级模块</th>
+                                    <th width="8%">二级模块</th>
                                     <th>权限</th>
                                     <th>URL</th>
-                                    <th width="6%">一级<br/>权重</th>
-                                    <th width="6%">二级<br/>权重</th>
-                                    <th width="6%">权限<br/>权重</th>
-                                    <th width="6%">状态</th>
+                                    <th width="5%">一级<br/>权重</th>
+                                    <th width="5%">二级<br/>权重</th>
+                                    <th width="5%">权限<br/>权重</th>
+                                    <th width="5%">状态</th>
                                     <th width="14%">创建时间</th>
                                     <th width="16%">操作</th>
                                 </tr>
@@ -40,7 +40,10 @@
                                     <td>{{ item.level1_name }}</td>
                                     <td>{{ item.level2_name }}</td>
                                     <td>{{ item.name }}</td>
-                                    <td>{{ item.url }}</td>
+                                    <td>{% autoescape False %}
+                                        {{ item.url | replace(',','<br/>') }}
+                                        {% endautoescape %}
+                                    </td>
                                     <td>{{ item.level1_weight }}</td>
                                     <td>{{ item.level2_weight }}</td>
                                     <td>{{ item.weight }}</td>

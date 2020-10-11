@@ -1,0 +1,110 @@
+{% extends "home/common/layout.html" %}
+
+{% block content %}
+<section class="content">
+    <div class="page-header">
+        <h3>服务器</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="box">
+                <div class="box-header with-border">
+                     <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12">
+                            <form class="form-inline wrap_search">
+                                <div class="form-group">
+                                    <input type="text" class="form-control col-sm-12 col-md-3 mb-2 mr-2"  name="kw" placeholder="请输入搜索关键词" value="{{sc['kw']}}">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                </div>
+                                <a class="btn btn-link" href="{{ GlobalUrlService.buildHomeUrl('/job/server/index') }}">重置搜索</a>
+                                {% if set_flag %}
+                                <a class="btn btn-primary pull-right add_server">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>服务器
+                                </a>
+                                {% endif %}
+                            </form>
+                        </div>
+                     </div>
+                </div>
+                <div class="box-body table-responsive no-padding server_list_wrap" >
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th width="6%">ID</th>
+                            <th>名称</th>
+                            <th>支持环境</th>
+                            <th>备注</th>
+                            <th width="8%">CPU LOAD</th>
+                            <th width="12%">内存（单位：G）</th>
+                            <th width="6%">权重</th>
+                            <th width="6%">状态</th>
+                            <th width="14%">创建时间</th>
+                            <th width="14%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if list %}
+                        {% for item in list %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.env }}</td>
+                            <td>{{ item.note }}</td>
+                            <td>{{ item.cpu_load }}</td>
+                            <td>{{ item.available_mem }} / {{ item.total_mem }}</td>
+                            <td>{{ item.weight }}</td>
+                            <td>
+                                <span class="label {% if item.status == 1 %} label-success {% else %} label-danger {% endif %} ">
+                                {{ CommonConstant.common_status_map[ item.status ] }}
+                                </span>
+                            </td>
+
+                            <td>{{ item.created_time }}</td>
+                            <td>
+                                {% if set_flag %}
+                                <a class="btn btn-link edit_server" data-id="{{ item.id }}">修改</a>
+                                {% endif %}
+
+                                {% if ops_flag %}
+                                    {%  if item.status == 1 %}
+                                        <a class="btn btn-link ops" data-id="{{ item.id }}" data-act="del">删除</a>
+                                    {% else %}
+                                          <a class="btn btn-link ops" data-id="{{ item.id }}" data-act="recovery">恢复</a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="10" class="text-center">(＞﹏＜)没有数据</td>
+                        </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    {% include 'common/pagenation.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{%block js %}
+{% autoescape false %}
+    {{ StaticPluginsHelper.select2() }}
+{% endautoescape %}
+<style type="text/css">
+    .select2-container--default .select2-selection--multiple .select2-selection__choice{
+        background-color:#5897fb;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove{
+        color:rgba(255,255,255,0.7);
+    }
+</style>
+<script src="{{ GlobalUrlService.buildWWWStaticUrl('/js/home/job/server/index.js') }}"></script>
+{% endblock %}

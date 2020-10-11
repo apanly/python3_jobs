@@ -37,22 +37,34 @@ class RBACService( BaseService):
         check_url = "/".join(page_url_arr)
         return RBACService.checkPrivilege( check_url ,ignore_root)
 
+    '''
+    判断当前人是否有当前url的个人my | 下属sub | 全部的权限all
+    当然type是其他的也可以的
+    '''
+
+    @staticmethod
+    def checkDataPrivilege( type = 'all',ignore_root = False ):
+        path = request.path
+        check_url = path + "_" + type;
+        return RBACService.checkPrivilege( check_url,ignore_root )
+
     @staticmethod
     def getRolePrivilege( role_id = 0 ):
         role_id = role_id if role_id else CurrentUserService.getRoleId()
         #所属角色拥有的权限
         if 'privilege_url' not in g or not g.privilege_url or len( g.privilege_url ) < 1 :
+            g.privilege_url = []
             owned_act = RoleAction.query.filter_by(role_id=role_id, status=CommonConstant.default_status_true).all()
             owned_act_ids = ModelHelper.getFieldList(owned_act, 'action_id')
             if not owned_act_ids:
-                return
+                return g.privilege_url
 
             owned_act_ids = list(map(int, owned_act_ids))
             act_list = Action.query.filter( Action.status == CommonConstant.default_status_true ,Action.id.in_( owned_act_ids ) ).all()
             if not act_list:
-                return
+                return g.privilege_url
 
-            g.privilege_url = []
+
             for item in act_list:
                 tmp_urls = str( item.url ).split(",")
                 g.privilege_url.extend( tmp_urls )

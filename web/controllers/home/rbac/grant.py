@@ -58,7 +58,7 @@ def grant_set():
 
 
         weight_list = [1]
-        weight_list.extend( range(5,65,5) )
+        weight_list.extend( range(5,80,5) )
 
         if act == "copy" and info:
             info.id = 0
@@ -75,13 +75,13 @@ def grant_set():
     weight = int( req.get("weight","1").strip() )
 
 
-    if not ValidateHelper.validLength( level1_name,1,10 ):
+    if not ValidateHelper.validLength( level1_name,1,20 ):
         return UtilHelper.renderErrJSON("请输入符合规范的一级菜单名称~~")
 
-    if not ValidateHelper.validLength( level2_name,1,10 ):
+    if not ValidateHelper.validLength( level2_name,1,20 ):
         return UtilHelper.renderErrJSON("请输入符合规范的二级菜单名称~~")
 
-    if not ValidateHelper.validLength( name,1,10 ):
+    if not ValidateHelper.validLength( name,1,20 ):
         return UtilHelper.renderErrJSON("请输入符合规范的权限名称~~")
 
     info = Action.query.filter_by(id=id).first()

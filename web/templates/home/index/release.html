@@ -1,0 +1,33 @@
+{% extends "home/common/layout.html" %}
+
+{% block content %}
+<section id="timeline">
+    <h1>{{ config['APP_NAME'] }}更新记录</h1>
+    <div class="demo-card-wrapper">
+    {% for item in list %}
+    <div class="demo-card">
+        <div class="head">
+            <div class="number-box">
+                <span>{{ count - loop.index0 }}</span>
+            </div>
+            <h2>
+                {{ item.date }}
+                <span style="margin-top: 15px; font-size: 16px; line-height: 15px;">
+                   {{ item.title }}
+                </span>
+            </h2>
+        </div>
+        <div class="body">
+            {% autoescape False %}
+            {{ item.content }}
+            {% endautoescape %}
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{%block css %}
+<link href="{{ GlobalUrlService.buildWWWStaticUrl('/css/home/release.css') }}" rel="stylesheet">
+{% endblock %}

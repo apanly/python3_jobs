@@ -1,0 +1,88 @@
+{% extends "home/common/layout.html" %}
+
+{% block content %}
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="nav-tabs-custom">
+                {% include "home/job/tools/nav.html" %}
+                <div class="tab-content">
+                    <div class="tab-pane active">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-12 col-lg-12">
+                                        <form class="form-inline wrap_search">
+                                            <div class="form-group">
+                                                <select class="form-control" name="status">
+                                                    <option value="{{ CommonConstant.default_status_neg_99 }}">请选择状态</option>
+                                                    {% for _key,_desc in status_map.items() %}
+                                                    <option {% if _key == sc.status  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group" style="width: 18%;" >
+                                                <input type="text" class="form-control col-sm-12 col-md-3"
+                                                       name="date_range_picker" placeholder="请选择日期" value=""
+                                                       autocomplete="off" style="width: 100%">
+                                                <input type="hidden" name="date_from" value="{{sc['date_from']}}">
+                                                <input type="hidden" name="date_to" value="{{sc['date_to']}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary">搜索</button>
+                                            </div>
+                                            <a class="btn btn-link" href="{{ GlobalUrlService.buildHomeUrl('/job/tools/alert') }}">重置搜索</a>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-hover table-bordered table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <td width="6%">Job Id</td>
+                                        <td width="14%">Job 名称</td>
+                                        <td>内容</td>
+                                        <td width="8%">状态</td>
+                                        <td width="14%">创建时间</td>
+                                    </tr>
+                                    {% if list %}
+                                    {% for item in list %}
+                                    <tr>
+                                        <td>
+                                            <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/info') }}?id={{ item.job_id }}">{{ item.job_id }}</a>
+                                        </td>
+                                        <td>
+                                            <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/info') }}?id={{ item.job_id }}">{{ item.job_name }}</a>
+                                        </td>
+                                        <td>{{ item.content }}</td>
+                                        <td>{{ item.status_desc }}</td>
+                                        <td>{{ item.created_time }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">(＞﹏＜)没有数据</td>
+                                    </tr>
+                                    {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="box-footer clearfix">
+                                {% include 'common/pagenation.html' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{%block js %}
+{% autoescape false %}
+    {{ StaticPluginsHelper.daterangepicker() }}
+{% endautoescape %}
+<script src="{{ GlobalUrlService.buildWWWStaticUrl('/js/home/job/tools/log.js') }}"></script>
+{% endblock %}

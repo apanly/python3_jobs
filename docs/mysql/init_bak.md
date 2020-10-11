@@ -1,8 +1,8 @@
 ### 数据库变更历史
 
 ```
-CREATE DATABASE `learn_master` DEFAULT COLLATE = `utf8mb4_general_ci`;
-use learn_master;
+CREATE DATABASE `p3_jobs_db` DEFAULT COLLATE = `utf8mb4_general_ci`;
+use p3_jobs_db;
 CREATE TABLE `action` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '权限ID',
   `level1_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '一级菜单名称',

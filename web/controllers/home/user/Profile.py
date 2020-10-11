@@ -50,7 +50,7 @@ def home_news():
     status = int( req.get("status",CommonConstant.default_status_neg_99) )
     page = int(req.get("p", 1))
 
-    query = UserNews.query
+    query = UserNews.query.filter_by( uid = CurrentUserService.getUid() )
     if kw:
         query = query.filter(UserNews.title.ilike('%{}%'.format(kw)))
 

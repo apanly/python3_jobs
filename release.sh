@@ -1,30 +1,30 @@
 #!/bin/sh
 
 sync(){
-    cmd="cd /data/www/private_deploy/learn_master  ;  git fetch --all ; git reset --hard origin/master"
+    cmd="cd /data/www/private_deploy/python3_jobs  ;  git fetch --all ; git reset --hard origin/master"
     echo "\033[32m"$cmd
     eval $cmd
     DATE=`date +%Y%m%d%H%M%S`
-    echo $DATE > /data/www/release_version/learn_master
+    echo $DATE > /data/www/release_version/python3_jobs
     return 0
 }
 
 reload() {
-    cmd="export ops_config='hsh' && /data/www/python3/bin/uwsgi --reload /data/www/logs/learn_master/app.pid"
+    cmd="export ops_config='hsh' && /data/www/python3/bin/uwsgi --reload /data/www/logs/python3_jobs/app.pid"
     echo "\033[32m"$cmd
     eval $cmd
     return 0
 }
 
 stop() {
-    cmd="export ops_config='hsh' && /data/www/python3/bin/uwsgi --stop /data/www/logs/learn_master/app.pid"
+    cmd="export ops_config='hsh' && /data/www/python3/bin/uwsgi --stop /data/www/logs/python3_jobs/app.pid"
     echo "\033[32m"$cmd
     eval $cmd
     return 0
 }
 
 start() {
-    cmd="export ops_config='hsh' && /data/www/python3/bin/uwsgi --ini /data/www/private_deploy/learn_master/uwsgi.ini"
+    cmd="export ops_config='hsh' && /data/www/python3/bin/uwsgi --ini /data/www/private_deploy/python3_jobs/uwsgi.ini"
     echo "\033[32m"$cmd
     eval $cmd
     return 0

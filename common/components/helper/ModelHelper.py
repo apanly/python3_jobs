@@ -7,7 +7,7 @@ class ModelHelper(BaseService):
     根据id字段获取一个dict出来
     '''
     @staticmethod
-    def getDictFilterField( db_model,select_field = '',key_field = "id",id_list = None ):
+    def getDictFilterField( db_model,key_field = "id",select_field = '',id_list = None ):
         ret = {}
         query = db_model.query
         if id_list and len( id_list ) > 0:
@@ -23,8 +23,12 @@ class ModelHelper(BaseService):
             ret[ getattr( item,key_field ) ] = item
         return ret
 
+
+    '''
+    获取model 返回的字典 列表
+    '''
     @staticmethod
-    def getDictListFilterField( db_model,select_filed = '',key_field = "id",id_list = None ):
+    def getDictListFilterField( db_model,key_field = "id",select_filed = '',id_list = None ):
         ret = {}
         query = db_model.query
         if id_list and len( id_list ) > 0:
@@ -42,6 +46,7 @@ class ModelHelper(BaseService):
             ret[ getattr( item,key_field ) ].append(item )
         return ret
 
+
     '''
     从model列表中取出某个字段，相当于php array_column
     '''
@@ -57,3 +62,12 @@ class ModelHelper(BaseService):
                 break
             ret.append( getattr(item, key_field) )
         return ret
+
+    '''
+    将model对象转成dict对象
+    '''
+    @staticmethod
+    def model2Dict( model ):
+        from sqlalchemy.orm import class_mapper
+        columns = [c.key for c in class_mapper(model.__class__).columns]
+        return dict((c, getattr(model, c)) for c in columns)

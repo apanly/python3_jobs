@@ -15,6 +15,15 @@ class StaticPluginsHelper(BaseService):
         return StaticPluginsHelper.groupEcho( res )
 
     @staticmethod
+    def datetimepicker():
+        res = [
+            GlobalUrlService.buildStaticResUrl("/plugins/datetimepicker/jquery.datetimepicker.min.css"),
+            GlobalUrlService.buildStaticResUrl("/plugins/daterangepicker/moment.min.js"),
+            GlobalUrlService.buildStaticResUrl("/plugins/datetimepicker/jquery.datetimepicker.full.min.js")
+        ]
+        return StaticPluginsHelper.groupEcho(res)
+
+    @staticmethod
     def select2():
         res = [
             GlobalUrlService.buildStaticResUrl("/plugins/select2/select2.min.css"),

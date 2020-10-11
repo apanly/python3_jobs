@@ -1,0 +1,195 @@
+{% extends "home/common/layout.html" %}
+
+{% block content %}
+<section class="content">
+    <div class="page-header">
+        <h3>Job列表</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12">
+                            <form class="form-inline wrap_search">
+                                <div class="form-group">
+                                    <select class="form-control" name="env_id">
+                                        <option value="0">请选择运行环境</option>
+                                        {% for _key,_desc in server_env_map.items() %}
+                                        <option {% if _key == sc.env_id  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="server_id">
+                                        <option value="0">请选择服务器</option>
+                                        {% for _key,_item in server_map.items() %}
+                                        <option {% if _item.id == sc.server_id  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}[ {{_item.note}} ]</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="status">
+                                        <option value="{{ CommonConstant.default_status_neg_99 }}">请选择调度状态</option>
+                                        {% for _key,_desc in job_status_map.items() %}
+                                        <option {% if _key == sc.status  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <select class="form-control" name="display_status">
+                                        <option value="{{ CommonConstant.default_status_neg_99 }}">请选择展示状态</option>
+                                        {% for _key,_desc in display_status_map.items() %}
+                                        <option {% if _key == sc.display_status  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control col-sm-12 col-md-3 mb-2 mr-2" name="kw"
+                                           placeholder="请输入搜索关键词" value="{{sc['kw']}}">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                </div>
+                                <a class="btn btn-link" href="{{ GlobalUrlService.buildHomeUrl('/job/index/index') }}">重置搜索</a>
+                                {% if set_flag %}
+                                <a class="btn btn-primary pull-right"
+                                   href="{{ GlobalUrlService.buildHomeUrl('/job/index/set') }}">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Job
+                                </a>
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body table-responsive no-padding job_list_wrap">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th width="6%">ID</th>
+                            <th>名称</th>
+                            <th width="16%">服务器/运行环境</th>
+                            <th width="13%">下次运行时间</th>
+                            <th width="6%">运行周期</th>
+                            <th width="10%">运行状态</th>
+                            <th width="6%">系统调度</th>
+                            <th width="14%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if list %}
+                        {% for item in list %}
+                        <tr {% if item.is_del %} class="bg-warning" {% endif %}>
+                            <td>{{ item.id }}</td>
+                            <td>
+                                <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/info') }}?id={{ item.id }}">{{ item.name }}</a>
+                            </td>
+                            <td>{{ item.server_name }} / {{ item.env_name }}</td>
+                            <td>{{ item.next_run_time }}</td>
+                            <td>
+                                {% if item.job_type == CommonConstant.default_status_true %}
+                                    {{ item.run_interval }}分钟
+                                {% else %}
+                                    {{ CommonConstant.job_type_map[ item.job_type ] }}
+                                {% endif %}
+                            </td>
+                            <td>{{ item.run_status_desc }}</td>
+                            <td>{{ item.job_status_desc }}</td>
+                            <td>
+                                {% if set_flag %}
+                                <a class="btn btn-link"
+                                   href="{{ GlobalUrlService.buildHomeUrl('/job/index/set') }}?id={{ item.id }}">修改</a>
+                                {% endif %}
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary">操作</button>
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {% if item.status %}
+                                        <li>
+                                            <a class="ops" href="{{ GlobalUrlService.buildNull() }}"
+                                               data-act="system_not_run" data-id="{{ item.id }}"
+                                               data-title="系统不在调度：指的是以后不在被执行调度了">系统不在调度</a>
+                                        </li>
+                                        {% else %}
+                                        <li>
+                                            <a class="ops" href="{{ GlobalUrlService.buildNull() }}"
+                                               data-act="system_run" data-id="{{ item.id }}"
+                                               data-title="系统调度：指的是在下一次周期会被继续执行调度">系统调度</a>
+                                        </li>
+                                        {% endif %}
+                                        <li>
+                                            <a class="ops" href="{{ GlobalUrlService.buildNull() }}" data-act="run_next"
+                                               data-id="{{ item.id }}" data-title="将调度时间改为下一分钟调度">立即调度</a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>
+                                            <a  href="javascript:common_ops.alert('功能正在开发，敬请期待~~');" data-id="{{ item.id }}" data-title="强制终止Job将杀死Job">强制终止Job</a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>
+                                            <a href="{{ GlobalUrlService.buildHomeUrl('/job/tools/log') }}?job_id={{ item.id }}">查看日志</a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>
+                                            <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/set') }}?id={{ item.id }}&act=copy">复制Job</a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        {% if item.is_del %}
+                                        <li>
+                                            <a class="ops" href="{{ GlobalUrlService.buildNull() }}" data-act="recovery"
+                                               data-id="{{ item.id }}">恢复</a>
+                                        </li>
+                                        {% else %}
+                                        <li>
+                                            <a class="ops" href="{{ GlobalUrlService.buildNull() }}" data-act="del"
+                                               data-id="{{ item.id }}">隐藏</a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center">(＞﹏＜)没有数据</td>
+                        </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    {% include 'common/pagenation.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block css %}
+<style type="text/css">
+    #修复按钮组被表格遮住问题
+
+    @media (max-width: 767px) {
+        .table-responsive .dropdown-menu,
+        .table-responsive .dropdown-toggle {
+            position: static !important;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .table-responsive {
+            overflow: visible;
+        }
+    }
+</style>
+{% endblock %}
+{%block js %}
+<script src="{{ GlobalUrlService.buildWWWStaticUrl('/js/home/job/index/index.js') }}"></script>
+{% endblock %}

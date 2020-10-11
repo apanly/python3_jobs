@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+
 from application import app,manager
 from flask_script import Command,Option
 import argparse,sys,traceback,os,importlib
@@ -26,9 +28,10 @@ class runJob( Command ):
         args = sys.argv[2:]
         parser = argparse.ArgumentParser( add_help = True )
 
-        parser.add_argument("-m","--name",dest = "name",metavar = "name", help="指定job名",required=True)
-        parser.add_argument("-a","--act",dest = "act",metavar = "act", help="Job动作",required=False)
-        parser.add_argument("-p","--param",dest = "param",nargs = "*", metavar = "param",help="业务参数",default = '',required=False)
+        parser.add_argument("-m","--name",dest = "name",metavar = "name",type = str, help="指定job名",required=True)
+        parser.add_argument("-a","--act",dest = "act",metavar = "act", type = str,help="Job动作",required=False)
+        parser.add_argument("-p","--param",dest = "param",nargs = "*",type = str, metavar = "param",help="业务参数",default = "",required=False)
+        parser.add_argument("-jp","--json-param",dest = "param",nargs = "*",type = json.loads, metavar = "param",help="JSON格式业务参数",default = dict(),required=False)
         params = parser.parse_args( args )
         params_dict = params.__dict__
         ret_params = {}

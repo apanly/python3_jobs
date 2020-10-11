@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-APP_NAME = "即学即码实验室"
+APP_NAME = "Job管理调度平台"
 APP_VERSION = "V1.0"
 SERVER_PORT = 8889
-API_SERVER_PORT = 8888
 
 '''
 有可能你使用浏览器看到的一串字符串(ascii编码)不是那么容易看懂的，
@@ -19,8 +18,7 @@ SECRET_KEY = 'ZoDWffA2deeVOzii'
 
 ## 域名配置
 DOMAIN = {
-    "www": "http://192.168.33.10:8889",
-    "api": "http://192.168.33.10:8888",
+    "www": "http://192.168.33.10:" + str( SERVER_PORT ),
     "resource" : "http://static.dev.hsh568.cn"
 }
 
@@ -50,7 +48,7 @@ IGNORE_CHECK_LOGIN_URLS = [
 HTTP_TIMEOUT = 5
 
 ##日志存放位置
-LOG_ROOT_PATH = "/data/logs/learn_master"
+LOG_ROOT_PATH = "/tmp/logs/python3_jobs"
 ##版本号文件
-RELEASE_PATH = "/data/www/release_version/learn_master"
+RELEASE_PATH = "/data/www/release_version/python3_jobs"
 

@@ -49,13 +49,18 @@ class UtilHelper( BaseService):
     def renderErrJSON(msg="操作失败~~", data={},code = -1):
         return UtilHelper.renderSucJSON( data = data,msg = msg,  code = code )
 
-
     @staticmethod
-    def isPC():
-        return UAHelper.isPC()
+    def getUsedMemory(pid):
+        # return the memory usage in MB
+        mem = 0
+        try:
+            import psutil
+            process = psutil.Process( int(pid) )
+            mem = process.memory_info()[0] / float(2 ** 20)
+        except:
+            pass
 
-
-
+        return mem
 
     '''
     自定义分页类

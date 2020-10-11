@@ -24,17 +24,17 @@ var grant_set_ops = {
             var url_target = $(".grant_set_wrap textarea[name=url]");
             var url = url_target.val();
 
-            if( !common_ops.validate.length( level1_name,1,10 )) {
+            if( !common_ops.validate.length( level1_name,1,20 )) {
                 common_ops.tip("请输入符合规范的一级菜单名称~~", level1_name_target);
                 return;
             }
 
-            if( !common_ops.validate.length( level2_name,1,10 )) {
+            if( !common_ops.validate.length( level2_name,1,20 )) {
                 common_ops.tip("请输入符合规范的二级菜单名称~~", level2_name_target);
                 return;
             }
 
-            if( !common_ops.validate.length( name,1,10 )) {
+            if( !common_ops.validate.length( name,1,20 )) {
                 common_ops.tip("请输入符合规范的权限名称~~", name_target);
                 return;
             }

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-import datetime
+import datetime,time
 from common.services.BaseService import BaseService
 
 
@@ -18,6 +18,15 @@ class DateHelper(BaseService):
             date = datetime.datetime.now()
 
         return date.strftime(format)
+
+    @staticmethod
+    def getTimestamps(date_str = None, format="%Y-%m-%d %H:%M:%S"):
+        time_array = time.strptime(date_str, format)
+        return int(time.mktime(time_array) )
+
+    @staticmethod
+    def getDateOnTimestamps( timestamps = 0, format="%Y-%m-%d %H:%M:%S"):
+        return time.strftime( format , time.localtime( timestamps ) )
 
     @staticmethod
     def getDateBefore(day=1, date=None):
@@ -77,3 +86,25 @@ class DateHelper(BaseService):
         if date is not None:
             now = date
         return now.isocalendar()[1]
+    
+    
+    @staticmethod
+    def formatBeautyTime( diff_time ):
+        retval = ''
+        if diff_time < 60:
+            retval = '%d秒' % diff_time
+        elif diff_time >= 60 and diff_time < 3600:
+            retval = "%d分%d秒" % (int(diff_time / 60), diff_time % 60)
+        elif diff_time >= 3600 and diff_time < 86400:
+            tmp_hour = int(diff_time / 3600)
+            tmp_mi = int((diff_time - tmp_hour * 3600) / 60)
+            tmp_se = int((diff_time - tmp_hour * 3600 - tmp_mi * 60) % 60)
+            retval = "%d时%d分%d秒" % (tmp_hour, tmp_mi, tmp_se)
+        elif diff_time >= 86400:
+            tmp_day = int(diff_time / 86400)
+            tmp_hour = int((diff_time - tmp_day * 86400) / 3600)
+            tmp_mi = int((diff_time - tmp_day * 86400 - tmp_hour * 3600) / 60)
+            tmp_se = (diff_time - tmp_day * 86400 - tmp_hour * 3600 - tmp_mi * 60) % 60
+            retval = "%d天%d时%d分%d秒" % (tmp_day, tmp_hour, tmp_mi, tmp_se )
+        return retval
+        

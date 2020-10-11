@@ -1,0 +1,119 @@
+{% extends "home/common/layout.html" %}
+
+{% block content %}
+<section class="content">
+    <div class="page-header">
+        <h3>
+            Job详情：{{ info.name }}
+            <a class="pull-right" href="{{ GlobalUrlService.buildHomeUrl('/job/index/index') }}">返回</a>
+            <a class="pull-right mr-5"
+               href="{{ GlobalUrlService.buildHomeUrl('/job/index/set') }}?id={{info.id}}">编辑</a>
+        </h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="box">
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <th width="10%">类目</th>
+                            <th>描述</th>
+                        </tr>
+                        <tr>
+                            <td>名称</td>
+                            <td>{{ info.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>命令</td>
+                            <td>{{ info.command }}</td>
+                        </tr>
+                        <tr>
+                            <td>服务器</td>
+                            <td>{{ info.server_name }} / {{ info.env_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>运行状态</td>
+                            <td>{{ info.run_status_desc }}</td>
+                        </tr>
+                        <tr>
+                            <td>调度状态</td>
+                            <td>{{ info.job_status_desc }}</td>
+                        </tr>
+                        <tr>
+                            <td>下次运行时间</td>
+                            <td>{{ info.next_run_time }}</td>
+                        </tr>
+                        <tr>
+                            <td>运行周期</td>
+                            <td>
+                                {% if info.job_type == CommonConstant.default_status_true %}
+                                    {{ info.run_interval }}分钟
+                                {% else %}
+                                    {{ CommonConstant.job_type_map[ info.job_type ] }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>预计运行时长</td>
+                            <td>
+                                {% if info.job_type != CommonConstant.default_status_pos_2 %}
+                                {{ info.threshold_down }} ~ {{ info.threshold_up }} 分钟
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>相关人</td>
+                            <td>
+                                {% for _key,_item in user_map.items() %}
+                                    {{ _item.name }}&nbsp;&nbsp;
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>备注</td>
+                            <td>{{ info.note }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered table-striped" style="margin-top: 15px;">
+                        <thead>
+                        <tr>
+                            <th colspan="6">调度日志&nbsp;&nbsp;<a href="{{ GlobalUrlService.buildHomeUrl('/job/tools/log') }}?job_id={{info.id}}">查看更多调度日志</a></th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr>
+                            <th>运行机器</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>运行时长（分钟）</th>
+                            <th>使用内存（M）</th>
+                            <th>运行状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if log_list %}
+                            {% for item in log_list %}
+                            <tr>
+                                <td>{{ item.server_name }}</td>
+                                <td>{{ item.start_time }}</td>
+                                <td>{{ item.end_time }}</td>
+                                <td>{{ item.duration }}</td>
+                                <td>{{ item.max_mem }}</td>
+                                <td>{{ item.status_desc }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">(＞﹏＜)没有运行日志</td>
+                        </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
