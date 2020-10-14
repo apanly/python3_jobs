@@ -42,6 +42,8 @@ class JobTask( BaseJob ):
                 app.logger.info("[reg] 需要服务器id参数 ")
                 return True
             self.reg( params[0] )
+        app.logger.info("it's over~~")
+        return True
 
     def reg(self,server_id = 0):
         app.logger.info( "[reg] start" )

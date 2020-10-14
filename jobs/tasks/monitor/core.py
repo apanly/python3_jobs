@@ -47,6 +47,8 @@ class JobTask( BaseJob ):
         self.current_time = time.time() - 300
         for item in list:
             self.handleItem( ModelHelper.model2Dict( item ),host )
+
+        app.logger.info("it's over~~")
         return True
 
     def handleItem(self, item ,host ):
