@@ -10,21 +10,21 @@ sync(){
 }
 
 reload() {
-    cmd="export ops_config='production' && /data/www/vir_python3/bin/uwsgi --reload /data/www/logs/python3_jobs/app.pid"
+    cmd="export ops_config='production' && /data/www/vir_python3/bin/uwsgi --reload /data/www/logs/jobs/app.pid"
     echo "\033[32m"$cmd
     eval $cmd
     return 0
 }
 
 stop() {
-    cmd="export ops_config='production' && /data/www/vir_python3/bin/uwsgi --stop /data/www/logs/python3_jobs/app.pid"
+    cmd="export ops_config='production' && /data/www/vir_python3/bin/uwsgi --stop /data/www/logs/jobs/app.pid"
     echo "\033[32m"$cmd
     eval $cmd
     return 0
 }
 
 start() {
-    cmd="export ops_config='production' && /data/www/vir_python3/bin/uwsgi --ini /data/www/private_deploy/python3_jobs/uwsgi.ini"
+    cmd="export ops_config='production' && /data/www/vir_python3/bin/uwsgi --ini /data/www/private_deploy/jobs/uwsgi.ini"
     echo "\033[32m"$cmd
     eval $cmd
     return 0
