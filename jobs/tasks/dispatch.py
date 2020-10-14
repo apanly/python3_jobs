@@ -58,7 +58,7 @@ class JobTask( BaseJob ):
 
             ##调度时间是否到了，应该加入到SQL查询中查询
             if t.next_run_time >= time.time():
-                app.logger.info("job_id:%s，运行时间未到")%( t.id )
+                app.logger.info( "job_id:%s，运行时间未到"%( t.id ) )
                 continue
 
             # 启子进程中运行
