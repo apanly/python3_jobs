@@ -38,7 +38,7 @@ CREATE TABLE `job_list` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
   PRIMARY KEY (`id`),
   KEY `idx_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Job列表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Job列表';
 
 CREATE TABLE `job_run_log` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -67,4 +67,18 @@ CREATE TABLE `job_alert_list` (
   KEY `idx_status` (`status`),
   KEY `idx_created_time` (`created_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='job报警列表';
+
+
+CREATE TABLE `job_category` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态 1：有效 0：无效',
+  `updated_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='job类型';
+
+ALTER TABLE `job_list` ADD `cate_id` INT  NOT NULL  DEFAULT '0'  COMMENT '分类id'  AFTER `job_type`;
+
 ```

@@ -89,3 +89,65 @@ def gii_model():
         pass
 
     return UtilHelper.renderSucJSON()
+
+@route_home_gii.route("/job",methods=[ "POST","GET" ])
+def gii_job():
+    default_path_prefix = "/jobs/tasks/"
+    if UtilHelper.isGet():
+
+        return UtilHelper.renderView( "/home/tools/gii/job.html",{
+            "default_path_prefix":default_path_prefix
+        })
+
+    req = request.values
+
+    filename = req.get("filename", "").strip()
+    path = req.get("path", "").strip()
+    note = req.get("note", "").strip()
+
+    ##后面这里的数据库做成选择的，因为有多数据库的可能
+    folder_path = app.root_path + default_path_prefix + path
+    #不存在就新建
+    if not os.path.exists( folder_path ):
+        os.makedirs( folder_path )
+
+    task_path = folder_path + "/" + filename + ".py"
+
+    module_task = ( ( path + "/" ) if path else '' ) + filename
+    tips = 'python {0}/manage_job.py runjob -m {1}'.format( app.root_path,module_task )
+
+    try:
+        content = '''
+# -*- coding: utf-8 -*-
+import logging
+from flask.logging import default_handler
+from jobs.BaseJob import BaseJob
+from application import app
+
+\'\'\'
+{0}
+{1}
+\'\'\'
+class JobTask( BaseJob ):
+    def __init__(self):
+        ## 设置Job使用debug模式
+        app.config['DEBUG'] = True
+        logging_format = logging.Formatter(
+            '%(levelname)s %(asctime)s %(filename)s:%(funcName)s L%(lineno)s %(message)s')
+        default_handler.setFormatter(logging_format)
+
+    def run(self, params):
+        app.logger.info( "执行命令是：{0}" )
+        app.logger.info( "这是自动生成的job" )
+        return True        
+        '''.format( note,tips )
+
+
+        f = open( task_path , "w", encoding="utf-8")
+        f.write( content )
+        f.flush()
+        f.close()
+    except Exception as e:
+        pass
+
+    return UtilHelper.renderSucJSON()

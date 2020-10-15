@@ -68,6 +68,8 @@ class ModelHelper(BaseService):
     '''
     @staticmethod
     def model2Dict( model ):
+        if model is None:
+            return dict()
         from sqlalchemy.orm import class_mapper
         columns = [c.key for c in class_mapper(model.__class__).columns]
         return dict((c, getattr(model, c)) for c in columns)

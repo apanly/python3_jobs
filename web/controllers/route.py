@@ -18,6 +18,7 @@ from web.controllers.home.log.log import route_home_log
 from web.controllers.home.link.index import route_home_link
 from web.controllers.home.job.index import route_home_job
 from web.controllers.home.job.server import route_home_job_server
+from web.controllers.home.job.cate import route_home_job_cate
 from web.controllers.home.job.tools import route_home_job_tools
 
 
@@ -36,6 +37,7 @@ MODULES = (
     ( route_home_profile, '/home/profile' ),
     ( route_home_job, '/home/job/index' ),
     ( route_home_job_server, '/home/job/server' ),
+    ( route_home_job_cate, '/home/job/cate' ),
     ( route_home_job_tools, '/home/job/tools' ),
 )
 

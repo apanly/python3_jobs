@@ -6,6 +6,7 @@ from common.components.helper.DateHelper import DateHelper
 from common.components.helper.ModelHelper import ModelHelper
 from common.components.helper.UtilHelper import UtilHelper
 from common.components.helper.ValidateHelper import ValidateHelper
+from common.models.job.JobCategory import JobCategory
 from common.models.job.JobList import JobList
 from common.models.job.JobRunLog import JobRunLog
 from common.models.job.JobServer import JobServer
@@ -32,6 +33,7 @@ display_status_map = {
 @route_home_job.route("/index")
 def job_index():
     req = request.values
+    cate_id = int( req.get("cate_id", CommonConstant.default_status_false) )
     env_id = int( req.get("env_id", CommonConstant.default_status_false) )
     server_id = int( req.get("server_id", CommonConstant.default_status_false) )
     status = int( req.get("status", CommonConstant.default_status_neg_99 ) )
@@ -46,6 +48,9 @@ def job_index():
         pass
     else:
         query = query.filter_by( owner_uid = CurrentUserService.getUid() )
+
+    if cate_id:
+        query = query.filter_by(cate_id=cate_id)
 
     if env_id:
         query = query.filter_by( env_id = env_id)
@@ -77,20 +82,25 @@ def job_index():
     data = []
 
     server_map = ModelHelper.getDictFilterField( JobServer )
+    cate_map = ModelHelper.getDictFilterField( JobCategory )
     server_env_map = CommonConstant.server_env_map
     run_status_map = CommonConstant.run_status_map
     if list:
         for item in list:
             tmp_data = ModelHelper.model2Dict( item )
             tmp_server_info = ModelHelper.model2Dict( server_map.get( tmp_data['server_id']) )
+            tmp_cate_info = ModelHelper.model2Dict( cate_map.get( tmp_data['cate_id']) )
             tmp_data['next_run_time'] = DateHelper.getDateOnTimestamps( tmp_data['next_run_time'] ,'%Y-%m-%d %H:%M' )
             tmp_data['env_name'] = server_env_map.get( tmp_data['env_id'] )
             tmp_data['run_status_desc'] = run_status_map.get( tmp_data['run_status'] )
             tmp_data['job_status_desc'] = job_status_map.get( tmp_data['status'] )
             tmp_data['server_name'] = tmp_server_info.get("name")
+            tmp_data['cate_name'] = tmp_cate_info.get("name",'')
+            tmp_data['run_interval_desc'] = DateHelper.formatBeautyTime( tmp_data['run_interval'] * 60 )
             data.append( tmp_data )
     sc = {
         'kw': kw,
+        'cate_id' : cate_id,
         'env_id' : env_id,
         'server_id' : server_id,
         'status' : status,
@@ -105,6 +115,7 @@ def job_index():
         "job_status_map":job_status_map,
         "server_env_map":server_env_map,
         "server_map":server_map,
+        "cate_map":cate_map,
         "display_status_map":display_status_map,
         "sc":sc ,
         "set_flag" : set_flag,
@@ -123,6 +134,7 @@ def job_info():
     info = ModelHelper.model2Dict(info)
 
     server_info = JobServer.query.filter_by(id = info['server_id']).first()
+    cate_info = JobCategory.query.filter_by(id= info['cate_id'] ).first()
     server_env_map = CommonConstant.server_env_map
     run_status_map = CommonConstant.run_status_map
 
@@ -131,6 +143,8 @@ def job_info():
     info['run_status_desc'] = run_status_map.get(info['run_status'])
     info['job_status_desc'] = job_status_map.get(info['status'])
     info['server_name'] = server_info.name
+    info['cate_name'] = cate_info.name if cate_info else ''
+    info['run_interval_desc'] = DateHelper.formatBeautyTime(info['run_interval'] * 60)
 
     user_map = ModelHelper.getDictFilterField( User,select_field = User.id,id_list = [ info['owner_uid'],info['relate_uid'] ]  )
 
@@ -178,11 +192,13 @@ def job_set():
 
         server_list = JobServer.query.order_by( JobServer.id.desc() ).all()
         user_list = User.query.order_by( User.id.desc() ).all()
+        cate_list = JobCategory.query.order_by(JobCategory.id.desc()).all()
 
         return UtilHelper.renderView("home/job/index/set.html",{
             "info" : info,
             "server_list" : server_list,
             "user_list" : user_list,
+            "cate_list" : cate_list,
             "server_env_map": CommonConstant.server_env_map,
             "job_type_map": CommonConstant.job_type_map,
             "job_status_map": job_status_map,
@@ -190,6 +206,7 @@ def job_set():
 
     req = request.values
     id = int(req['id']) if ('id' in req and req['id']) else 0
+    cate_id = int(req.get("cate_id", "0").strip())
     name = req.get("name", "").strip()
     env_id = int(req.get("env_id", "0" ).strip())
     server_id = int(req.get("server_id", "0" ).strip())
@@ -204,7 +221,9 @@ def job_set():
     threshold_up = int(req.get("threshold_up", "0" ).strip())
     note = req.get("note", "" ).strip()
 
-    #参数判断稍后，先把几个页面搞完
+    if cate_id < 1 :
+        return UtilHelper.renderErrJSON("请选择所属分类~~")
+
     if not ValidateHelper.validLength( name,1,15 ):
         return UtilHelper.renderErrJSON("请输入符合规范的名称~~")
 
@@ -278,6 +297,7 @@ def job_set():
     model_job.owner_uid = owner_uid
     model_job.relate_uid = relate_uid
     model_job.job_type = job_type
+    model_job.cate_id = cate_id
     model_job.command = command
     model_job.next_run_time = DateHelper.getTimestamps( next_run_time + ":00" )
     model_job.run_interval = run_interval

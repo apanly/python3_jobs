@@ -22,7 +22,7 @@
                         </tr>
                         <tr>
                             <td>名称</td>
-                            <td>{{ info.name }}</td>
+                            <td>{% if info.cate_name %}【{{ info.cate_name }}】{% endif %}{{ info.name }}</td>
                         </tr>
                         <tr>
                             <td>命令</td>
@@ -48,7 +48,7 @@
                             <td>运行周期</td>
                             <td>
                                 {% if info.job_type == CommonConstant.default_status_true %}
-                                    {{ info.run_interval }}分钟
+                                    {{ info.run_interval_desc }}
                                 {% else %}
                                     {{ CommonConstant.job_type_map[ info.job_type ] }}
                                 {% endif %}

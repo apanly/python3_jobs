@@ -91,20 +91,32 @@ class DateHelper(BaseService):
     @staticmethod
     def formatBeautyTime( diff_time ):
         retval = ''
+        day = hour = min = sec =  0
         if diff_time < 60:
-            retval = '%d秒' % diff_time
+            sec = '%d' % diff_time
         elif diff_time >= 60 and diff_time < 3600:
-            retval = "%d分%d秒" % (int(diff_time / 60), diff_time % 60)
+            min = int(diff_time / 60)
+            sec = diff_time % 60
         elif diff_time >= 3600 and diff_time < 86400:
-            tmp_hour = int(diff_time / 3600)
-            tmp_mi = int((diff_time - tmp_hour * 3600) / 60)
-            tmp_se = int((diff_time - tmp_hour * 3600 - tmp_mi * 60) % 60)
-            retval = "%d时%d分%d秒" % (tmp_hour, tmp_mi, tmp_se)
+            hour = int(diff_time / 3600)
+            min = int((diff_time - hour * 3600) / 60)
+            sec = int((diff_time - hour * 3600 - min * 60) % 60)
         elif diff_time >= 86400:
-            tmp_day = int(diff_time / 86400)
-            tmp_hour = int((diff_time - tmp_day * 86400) / 3600)
-            tmp_mi = int((diff_time - tmp_day * 86400 - tmp_hour * 3600) / 60)
-            tmp_se = (diff_time - tmp_day * 86400 - tmp_hour * 3600 - tmp_mi * 60) % 60
-            retval = "%d天%d时%d分%d秒" % (tmp_day, tmp_hour, tmp_mi, tmp_se )
+            day = int(diff_time / 86400)
+            hour = int((diff_time - day * 86400) / 3600)
+            min = int((diff_time - day * 86400 - hour * 3600) / 60)
+            sec = (diff_time - day * 86400 - hour * 3600 - min * 60) % 60
+
+        if day:
+            retval += "%s天"%( day )
+
+        if hour:
+            retval += "%s小时"%( hour )
+
+        if min:
+            retval += "%s分"%( min )
+
+        if sec:
+            retval += "%s秒"%( sec )
         return retval
         

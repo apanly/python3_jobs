@@ -13,6 +13,14 @@
                         <div class="col-xs-12 col-md-12 col-lg-12">
                             <form class="form-inline wrap_search">
                                 <div class="form-group">
+                                    <select class="form-control" name="cate_id">
+                                        <option value="0">请选择分类</option>
+                                        {% for _key,_item in cate_map.items() %}
+                                        <option {% if _item.id == sc.cate_id  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}</option>
+                                       {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <select class="form-control" name="env_id">
                                         <option value="0">请选择运行环境</option>
                                         {% for _key,_desc in server_env_map.items() %}
@@ -83,13 +91,15 @@
                         <tr {% if item.is_del %} class="bg-warning" {% endif %}>
                             <td>{{ item.id }}</td>
                             <td>
-                                <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/info') }}?id={{ item.id }}">{{ item.name }}</a>
+                                <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/info') }}?id={{ item.id }}">
+                                    {% if item.cate_name %}【{{ item.cate_name}}】{% endif %}{{ item.name }}
+                                </a>
                             </td>
                             <td>{{ item.server_name }} / {{ item.env_name }}</td>
                             <td>{{ item.next_run_time }}</td>
                             <td>
                                 {% if item.job_type == CommonConstant.default_status_true %}
-                                    {{ item.run_interval }}分钟
+                                    {{ item.run_interval_desc }}
                                 {% else %}
                                     {{ CommonConstant.job_type_map[ item.job_type ] }}
                                 {% endif %}

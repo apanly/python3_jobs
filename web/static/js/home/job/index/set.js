@@ -49,12 +49,19 @@ var index_set_ops = {
             width: '100%'
         });
 
+        $(".index_set_wrap .short_run_interval").click(function(){
+            $(".index_set_wrap input[name=run_interval]").val( $(this).data()['min']);
+        });
+
         $(".index_set_wrap .save").click(function () {
             var btn_target = $(this);
             if (btn_target.hasClass("disabled")) {
                 common_ops.alert("正在保存，请不要重复提交~~");
                 return false;
             }
+
+            var cate_id_target = $(".index_set_wrap select[name=cate_id]");
+            var cate_id = cate_id_target.val();
 
             var name_target = $(".index_set_wrap input[name=name]");
             var name = name_target.val();
@@ -90,6 +97,10 @@ var index_set_ops = {
             var threshold_up_target = $(".index_set_wrap input[name=threshold_up]");
             var threshold_up = threshold_up_target.val();
 
+            if( cate_id < 1 ){
+                common_ops.tip("请选择分类~~", cate_id_target);
+                return;
+            }
 
             if( !common_ops.validate.length( name,1,15 )) {
                 common_ops.tip("请输入符合规范的名称~~", name_target);

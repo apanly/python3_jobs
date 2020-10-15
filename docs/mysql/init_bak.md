@@ -193,7 +193,4 @@ INSERT INTO `user_news` ( `uid`, `title`, `content`, `status`, `updated_time`, `
 VALUES
 	(1, '欢迎使用即学即码Flask CMS V2框架', '使用教程请查看：http://dcenter.jixuejima.cn/#/flask/v2/readme~~', 0, '2020-10-11 21:52:33', '2020-10-11 21:52:33');
 
-
-
-
 ```

@@ -16,7 +16,15 @@
                 <div class="col-xs-12 col-md-12 col-lg-12">
                     <div class="form-group">
                         <label  class="col-xs-2 col-md-2 col-lg-2 control-label">名称</label>
-                        <div class="col-xs-10 col-md-10 col-lg-10">
+                        <div class="col-xs-2 col-md-2 col-lg-2" style="padding-right: 0;">
+                           <select class="form-control" name="cate_id">
+                               <option value="0">请选择分类</option>
+                               {% for _item in cate_list %}
+                                <option {% if _item.id == info.cate_id  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}</option>
+                               {% endfor %}
+                           </select>
+                        </div>
+                        <div class="col-xs-8 col-md-8 col-lg-8" style="padding-left: 5px;">
                             <input type="text" class="form-control" name="name" placeholder="请输入Job的名称，牛逼先从名字开始~~" value="{{ info.name }}">
                         </div>
                     </div>
@@ -143,12 +151,15 @@
                                 <input type="text" class="form-control" name="run_interval" placeholder="请输入运行间隔，单位分钟~~" value="{{ info.run_interval }}">
                                 <div class="input-group-addon">分钟</div>
                             </div>
-
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <label class="control-label">
                                 <span class="text-danger">*</span> 调度周期，下次调度间隔
                             </label>
+                        </div>
+                        <div class="col-xs-10 col-xs-offset-2 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2" style="margin-top: 5px;">
+                            <a href="{{ GlobalUrlService.buildNull() }}" class="short_run_interval" data-min="60">一小时</a>
+                            <a href="{{ GlobalUrlService.buildNull() }}" class="short_run_interval" data-min="1440">一天</a>
                         </div>
                     </div>
                 </div>

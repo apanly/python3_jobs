@@ -4,10 +4,10 @@ from application import app
 from common.services.RBACService import RBACService
 
 
-class MenuServiceService( BaseService):
+class MenuService( BaseService):
     @staticmethod
     def getMenu():
-        menus = MenuServiceService.definedMenu()
+        menus = MenuService.definedMenu()
         prefix = '/home'
         for _key, _item in menus.items():
             #如果强制设置了不显示，那就不要在判断
@@ -42,8 +42,9 @@ class MenuServiceService( BaseService):
                 "icon": "list",
                 "sub": [
                     {"title": "Job列表", "url": "/job/index/index"},
-                    {"title": "服务器", "url": "/job/server/index"},
                     {"title": "Job工具", "url": "/job/tools/index"},
+                    {"title": "服务器", "url": "/job/server/index"},
+                    {"title": "分类管理", "url": "/job/cate/index"}
                 ]
             },
             "link": {

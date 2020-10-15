@@ -1,0 +1,29 @@
+<div class="modal-dialog modal-sm cate_set_wrap" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close l-close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">设置分类</h4>
+        </div>
+         <div class="modal-body">
+            <form class="form-horizontal">
+                 <div class="form-group">
+                    <label  class="col-md-3 control-label">名称</label>
+                    <div class="col-md-9">
+                        <input type="text" name="name" class="form-control" value="{{ info.name }}" placeholder="请输入名称~~">
+                    </div>
+                </div>
+               <div class="form-group hidden">
+                    <div class="col-md-9">
+                        <input type="hidden" name="id" value="{{ info.id }}">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default l-close" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary save">确认</button>
+        </div>
+    </div>
+</div>
+<script src="{{ GlobalUrlService.buildWWWStaticUrl('/js/home/job/cate/set.js') }}"></script>
