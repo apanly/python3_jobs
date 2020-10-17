@@ -35,6 +35,12 @@ class JobTask( BaseJob ):
             app.logger.info("Cann't get a lock file，err msg : " + err_msg)
             return False
 
+        '''
+        整体延迟10秒,为什么 因为会出现一种情况，就是。从数据库回去数据的时候 job没有运行，
+        但是等到判断的时候，发现job运行了，所以我们要做一个延迟处理，让Job进行都运行起来
+        '''
+        time.sleep(10)
+
         params = self.getEnvFile()
         server_id = params['id']
         host = params['name']

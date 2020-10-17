@@ -128,6 +128,7 @@ class JobTask( BaseJob ):
                 # 创建子进程后子进程不结束 https://bbs.csdn.net/topics/390596479?_=1515055076
                 tmp_command = t.command
                 tmp_command = "tmp_job_%s='%s' && %s"%( job_id,DateHelper.getCurrentTime(),tmp_command)
+                #如果想要达到2>&1 可以设置为stdout=subprocess.PIPE,stderr=subprocess.STDOUT
                 sp = subprocess.Popen(tmp_command, bufsize = -1, shell = True, close_fds=True, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
 
                 tmp_run_job_pid = sp.pid
