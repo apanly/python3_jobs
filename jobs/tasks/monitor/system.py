@@ -41,7 +41,7 @@ class JobTask( BaseJob ):
             return True
 
         output_arr = output.split( '\n' )
-        if len( output_arr ) > 0:#说明有僵尸进程
+        if len( output_arr ) > 3:#多余3个僵尸进程
             staff_list = StaffService.getRootStaffList()
             staff_ids = ModelHelper.getFieldList( staff_list,"id")
             for tmp_staff_id in staff_ids:
