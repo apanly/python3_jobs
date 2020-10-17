@@ -42,4 +42,4 @@ class GlobalUrlService( BaseService):
             with open(release_path, 'r') as f:
                 ver = f.readline()
 
-        return ver
+        return ver.strip()
