@@ -38,6 +38,10 @@ var home_common_ops = {
             nav_name = "job";
         }
 
+        if (pathname.indexOf("/config/") > -1) {
+            nav_name = "config";
+        }
+
 
         if (nav_name == null) {
             return;
