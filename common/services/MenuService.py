@@ -74,7 +74,7 @@ class MenuService( BaseService):
             },
             "config": {
                 "title": "系统设置",
-                "icon": "info",
+                "icon": "cog",
                 "sub": [
                     {"title": "配置管理", "url": "/config/index"}
                 ]
