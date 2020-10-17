@@ -44,11 +44,12 @@ class JobTask( BaseJob ):
         for item in list:
             tmp_data = ModelHelper.model2Dict( item )
             tmp_job_info = ModelHelper.model2Dict(job_map.get(tmp_data['job_id']))
-            self.handleItem( tmp_data,tmp_job_info)
-
             tmp_msg = "Job Id : {0},名称：{1},报警内容：{2}".format( tmp_job_info['id'],tmp_job_info['name'],tmp_data['content'] )
-            if 'Job平台标识没有运行' not in tmp_msg and 'Job平台标识正在运行' not in tmp_msg:
-                alert_content.append( tmp_msg )
+            if 'Job平台标识没有运行'  in tmp_msg or 'Job平台标识正在运行' not in tmp_msg:
+                continue
+
+            self.handleItem(tmp_data, tmp_job_info)
+            alert_content.append(tmp_msg)
             done_ids.append( tmp_data['id'] )
 
         if done_ids:
