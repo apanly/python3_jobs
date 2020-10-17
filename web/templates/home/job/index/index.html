@@ -44,8 +44,8 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <select class="form-control" name="server_id">
+                                <div class="form-group" style="width:12%">
+                                    <select class="form-control" name="server_id"  style="width:100%">
                                         <option value="0">请选择服务器</option>
                                         {% for _key,_item in server_map.items() %}
                                         <option {% if _item.id == sc.server_id  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}[ {{_item.note}} ]</option>
