@@ -3,7 +3,15 @@
 {% block content %}
 <section class="content">
     <div class="page-header">
-        <h3>Job列表</h3>
+        <h3>
+            Job列表
+            {% if set_flag %}
+            <a class="btn btn-primary pull-right"
+               href="{{ GlobalUrlService.buildHomeUrl('/job/index/set') }}">
+                <i class="fa fa-plus" aria-hidden="true"></i> Job
+            </a>
+            {% endif %}
+        </h3>
     </div>
     <div class="row">
         <div class="col-md-12 col-lg-12">
@@ -17,6 +25,14 @@
                                         <option value="0">请选择分类</option>
                                         {% for _key,_item in cate_map.items() %}
                                         <option {% if _item.id == sc.cate_id  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}</option>
+                                       {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="owner_uid">
+                                        <option value="0">请选择负责人</option>
+                                        {% for _key,_item in staff_map.items() %}
+                                        <option {% if _item.id == sc.owner_uid  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}</option>
                                        {% endfor %}
                                     </select>
                                 </div>
@@ -61,12 +77,6 @@
                                     <button type="submit" class="btn btn-primary">搜索</button>
                                 </div>
                                 <a class="btn btn-link" href="{{ GlobalUrlService.buildHomeUrl('/job/index/index') }}">重置搜索</a>
-                                {% if set_flag %}
-                                <a class="btn btn-primary pull-right"
-                                   href="{{ GlobalUrlService.buildHomeUrl('/job/index/set') }}">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> Job
-                                </a>
-                                {% endif %}
                             </form>
                         </div>
                     </div>
@@ -77,7 +87,8 @@
                         <tr>
                             <th width="6%">ID</th>
                             <th>名称</th>
-                            <th width="16%">服务器/运行环境</th>
+                            <th width="14%">服务器/运行环境</th>
+                            <th width="14%">负责人/相关人</th>
                             <th width="13%">下次运行时间</th>
                             <th width="6%">运行周期</th>
                             <th width="10%">运行状态</th>
@@ -96,6 +107,7 @@
                                 </a>
                             </td>
                             <td>{{ item.server_name }} / {{ item.env_name }}</td>
+                            <td>{{ item.owner_name }} / {{ item.relate_name }}</td>
                             <td>{{ item.next_run_time }}</td>
                             <td>
                                 {% if item.job_type == CommonConstant.default_status_true %}
@@ -168,7 +180,7 @@
                         {% endfor %}
                         {% else %}
                         <tr>
-                            <td colspan="8" class="text-center">(＞﹏＜)没有数据</td>
+                            <td colspan="9" class="text-center">(＞﹏＜)没有数据</td>
                         </tr>
                         {% endif %}
                         </tbody>

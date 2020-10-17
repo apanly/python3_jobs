@@ -34,6 +34,7 @@ display_status_map = {
 def job_index():
     req = request.values
     cate_id = int( req.get("cate_id", CommonConstant.default_status_false) )
+    owner_uid = int( req.get("owner_uid", CommonConstant.default_status_false) )
     env_id = int( req.get("env_id", CommonConstant.default_status_false) )
     server_id = int( req.get("server_id", CommonConstant.default_status_false) )
     status = int( req.get("status", CommonConstant.default_status_neg_99 ) )
@@ -54,6 +55,9 @@ def job_index():
 
     if env_id:
         query = query.filter_by( env_id = env_id)
+
+    if owner_uid:
+        query = query.filter_by(owner_uid=owner_uid)
 
     if server_id:
         query = query.filter_by( server_id = server_id)
@@ -83,6 +87,7 @@ def job_index():
 
     server_map = ModelHelper.getDictFilterField( JobServer )
     cate_map = ModelHelper.getDictFilterField( JobCategory )
+    staff_map = ModelHelper.getDictFilterField( User )
     server_env_map = CommonConstant.server_env_map
     run_status_map = CommonConstant.run_status_map
     if list:
@@ -90,17 +95,22 @@ def job_index():
             tmp_data = ModelHelper.model2Dict( item )
             tmp_server_info = ModelHelper.model2Dict( server_map.get( tmp_data['server_id']) )
             tmp_cate_info = ModelHelper.model2Dict( cate_map.get( tmp_data['cate_id']) )
+            tmp_owner_staff_info = ModelHelper.model2Dict( staff_map.get( tmp_data['owner_uid']) )
+            tmp_relate_staff_info = ModelHelper.model2Dict( staff_map.get( tmp_data['relate_uid']) )
             tmp_data['next_run_time'] = DateHelper.getDateOnTimestamps( tmp_data['next_run_time'] ,'%Y-%m-%d %H:%M' )
             tmp_data['env_name'] = server_env_map.get( tmp_data['env_id'] )
             tmp_data['run_status_desc'] = run_status_map.get( tmp_data['run_status'] )
             tmp_data['job_status_desc'] = job_status_map.get( tmp_data['status'] )
             tmp_data['server_name'] = tmp_server_info.get("name")
             tmp_data['cate_name'] = tmp_cate_info.get("name",'')
+            tmp_data['owner_name'] = tmp_owner_staff_info.get("name",'')
+            tmp_data['relate_name'] = tmp_relate_staff_info.get("name",'')
             tmp_data['run_interval_desc'] = DateHelper.formatBeautyTime( tmp_data['run_interval'] * 60 )
             data.append( tmp_data )
     sc = {
         'kw': kw,
         'cate_id' : cate_id,
+        'owner_uid' : owner_uid,
         'env_id' : env_id,
         'server_id' : server_id,
         'status' : status,
@@ -115,6 +125,7 @@ def job_index():
         "job_status_map":job_status_map,
         "server_env_map":server_env_map,
         "server_map":server_map,
+        "staff_map":staff_map,
         "cate_map":cate_map,
         "display_status_map":display_status_map,
         "sc":sc ,

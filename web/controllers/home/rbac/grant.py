@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint,request
+from sqlalchemy import or_
+
 from application import db
 from common.components.helper.UtilHelper import UtilHelper
 from common.components.helper.ValidateHelper import ValidateHelper
@@ -18,9 +20,13 @@ route_home_grant = Blueprint('home_grant_page', __name__)
 @route_home_grant.route("/index")
 def grant_index():
     req = request.values
+    kw = req.get("kw", "").strip()
     page = int(req.get("p", 1))
 
     query = Action.query
+    if kw:
+        query = query.filter(or_(Action.name.ilike('%{}%'.format(kw)), Action.level1_name.ilike('%{}%'.format(kw)),Action.level2_name.ilike('%{}%'.format(kw))))
+
     page_params = {
         "total": query.count(),
         "page_size": CommonConstant.PAGE_SIZE,
