@@ -10,3 +10,4 @@ flask-sqlacodegen
 uwsgi
 validators
 psutil
+requests

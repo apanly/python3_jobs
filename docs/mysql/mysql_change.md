@@ -82,3 +82,26 @@ CREATE TABLE `job_category` (
 ALTER TABLE `job_list` ADD `cate_id` INT  NOT NULL  DEFAULT '0'  COMMENT '分类id'  AFTER `job_type`;
 
 ```
+
+#### 2020-10-17 郭威
+```
+CREATE TABLE `sysconfig` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '配置描述',
+  `tip` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `k_field` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '配置名称key',
+  `k_val` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '配置对应的值',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态 1：有效 0：无效',
+  `updated_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_k_field` (`k_field`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='系统配置';
+
+INSERT INTO `sysconfig` (`id`, `name`, `tip`, `k_field`, `k_val`, `status`, `updated_time`, `created_time`)
+VALUES
+	(1, '钉钉', '请输入钉钉机器人的webhook地址', 'dingding', '', 0, '2020-10-17 12:46:22', '2020-10-17 11:51:02'),
+	(2, '企业微信', '请输入企业机器人的webhook地址', 'wechat_work', '', 0, '2020-10-17 12:45:38', '2020-10-17 11:51:28');
+
+
+```

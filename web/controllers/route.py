@@ -20,6 +20,7 @@ from web.controllers.home.job.index import route_home_job
 from web.controllers.home.job.server import route_home_job_server
 from web.controllers.home.job.cate import route_home_job_cate
 from web.controllers.home.job.tools import route_home_job_tools
+from web.controllers.home.config.index import route_home_config_index
 
 
 MODULES = (
@@ -39,6 +40,7 @@ MODULES = (
     ( route_home_job_server, '/home/job/server' ),
     ( route_home_job_cate, '/home/job/cate' ),
     ( route_home_job_tools, '/home/job/tools' ),
+    ( route_home_config_index, '/home/config' ),
 )
 
 

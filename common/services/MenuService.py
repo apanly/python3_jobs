@@ -71,6 +71,13 @@ class MenuService( BaseService):
                     {"title": "访问日志", "url": "/log/access"},
                     {"title": "错误日志", "url": "/log/error"}
                 ]
+            },
+            "config": {
+                "title": "系统设置",
+                "icon": "info",
+                "sub": [
+                    {"title": "配置管理", "url": "/config/index"}
+                ]
             }
         }
 

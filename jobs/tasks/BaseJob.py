@@ -93,3 +93,9 @@ class BaseJob():
         except Exception as error:
             print( self.getErrMsg() )
         return pid
+
+    def exitOK(self):
+        return 0
+
+    def exitFail(self,exit_code = 1):
+        return exit_code

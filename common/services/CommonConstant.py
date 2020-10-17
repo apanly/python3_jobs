@@ -101,3 +101,7 @@ class CommonConstant(BaseService):
         1: "运行成功"
     }
 
+
+    config_dingding = "dingding"
+    config_workwechat = "wechat_work"
+
