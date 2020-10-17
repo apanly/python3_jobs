@@ -32,7 +32,7 @@ class JobTask( BaseJob ):
 
         if not list:
             app.logger.info("没有报警异常数据需要处理")
-            return True
+            return self.exitOK()
 
         job_ids = ModelHelper.getFieldList(list, "job_id")
         job_map = ModelHelper.getDictFilterField(JobList, select_field=JobList.id, id_list=job_ids.sort())
