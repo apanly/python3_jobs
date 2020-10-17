@@ -47,7 +47,7 @@ class JobTask( BaseJob ):
             self.handleItem( tmp_data,tmp_job_info)
 
             tmp_msg = "Job Id : {0},名称：{1},报警内容：{2}".format( tmp_job_info['id'],tmp_job_info['name'],tmp_data['content'] )
-            if 'Job平台标识没有运行' not in tmp_msg:
+            if 'Job平台标识没有运行' not in tmp_msg and 'Job平台标识正在运行' not in tmp_msg:
                 alert_content.append( tmp_msg )
             done_ids.append( tmp_data['id'] )
 

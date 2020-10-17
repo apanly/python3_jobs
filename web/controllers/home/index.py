@@ -30,6 +30,11 @@ def home_index():
 def home_release():
     release_list = [
         {
+            "title": "V1.1 上线",
+            "date": "2020-10-14",
+            "content": "增加Job分类管理，每个Job需要所属组<br/>增加钉钉和企业微信报警配置"
+        },
+        {
             "title": "V1.0 上线",
             "date": "2020-10-03",
             "content": "Job管理调度平台 正式上线<br/>服务器管理、Job管理、Job工具、异常监控"
