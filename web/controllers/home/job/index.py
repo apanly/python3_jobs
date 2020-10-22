@@ -293,10 +293,6 @@ def job_set():
     else:
         model_job = JobList()
 
-        if status:
-            model_job.run_status = CommonConstant.default_status_true
-
-
     ##只有需要调度的才需要判断时间
     if model_job.run_status != CommonConstant.default_status_pos_2 and status \
             and DateHelper.getTimestamps(next_run_time + ":00") < time.time():
@@ -316,6 +312,9 @@ def job_set():
     model_job.threshold_down = threshold_down
     model_job.note = note
     model_job.status = status
+    if status:
+        model_job.run_status = CommonConstant.default_status_true
+
 
 
     db.session.add( model_job )
@@ -352,6 +351,7 @@ def job_ops():
     elif act == "system_run":
         #如果可以调度了，是不是要把调度时间改成下一个周期
         info.status = CommonConstant.default_status_true
+        info.run_status = CommonConstant.default_status_true
         info.next_run_time = info.next_run_time + int( math.ceil((time.time() - info.next_run_time) / (info.run_interval * 60)) * info.run_interval * 60)
     elif act == "run_next":
 
