@@ -34,7 +34,7 @@ display_status_map = {
 def job_index():
     req = request.values
     cate_id = int( req.get("cate_id", CommonConstant.default_status_false) )
-    owner_uid = int( req.get("owner_uid", CommonConstant.default_status_false) )
+    owner_uid = int( req.get("owner_uid", CurrentUserService.getUid() ) )
     env_id = int( req.get("env_id", CommonConstant.default_status_false) )
     server_id = int( req.get("server_id", CommonConstant.default_status_false) )
     status = int( req.get("status", CommonConstant.default_status_neg_99 ) )
