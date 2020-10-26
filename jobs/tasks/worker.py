@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import getpass,json,multiprocessing,os,re,logging
+import getpass,json,multiprocessing,os,re,logging,subprocess
 from flask.logging import default_handler
 from application import app, db
 from common.components.helper.DateHelper import DateHelper
@@ -12,6 +12,8 @@ from jobs.tasks.BaseJob import BaseJob
 python manage_job.py runjob -m worker -a reg -p server_id
 python manage_job.py runjob -m worker -a reg -jp '{"server_id":1}'
 python manage_job.py runjob -m worker -a update 
+
+##配置 dispatch 日志是使用logrotate管理
 python manage_job.py runjob -m worker -a logrotate 
 '''
 
@@ -37,6 +39,8 @@ class JobTask( BaseJob ):
         act = kwargs['act']
         if act == "update":
             self.update()
+        elif act == "logrotate":
+            self.logrotate()
         else:
             params = kwargs['param']
             if len( params) < 1:
@@ -137,6 +141,35 @@ MAILTO=""
             print( "Saved Success" )
         else:
             print( "Cancel" )
+
+    '''
+    将dispatch 日志是使用logrotate管理
+    '''
+    def logrotate(self):
+        user = getpass.getuser()
+        if user != 'root':
+            app.logger.info("logrotate 配置必须私用root账号")
+            return True
+        log_path = self.getLogPath("dispatch.log")
+        cmd = '''
+        /bin/echo "{0} {{
+            su www www
+            create 0664 www root
+            daily
+            rotate 15
+            copytruncate
+            missingok
+            notifempty
+            dateext
+            dateformat .%Y%m%d
+        }}" > /etc/logrotate.d/jobs
+        '''.format( log_path )
+
+        app.logger.info( cmd )
+        status, output = subprocess.getstatusoutput(cmd)
+        app.logger.info( "返回结果" + output )
+        app.logger.info( "返回状态" + str(status) )
+        return True
 
     def getMem(self):
         total_mem = 0.00

@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, request
 from common.components.helper.DateHelper import DateHelper
+from common.components.helper.ModelHelper import ModelHelper
 from common.components.helper.UtilHelper import UtilHelper
 from common.models.job.JobAlertList import JobAlertList
+from common.models.job.JobCategory import JobCategory
 from common.models.job.JobList import JobList
 from common.models.job.JobServer import JobServer
 from common.models.notice.UserNews import UserNews
 from common.services.CommonConstant import CommonConstant
 from common.services.CurrentUserService import CurrentUserService
+from sqlalchemy import func
 
 route_home_index = Blueprint('home_index_page', __name__)
 
@@ -19,10 +22,23 @@ def home_index():
     job_count = JobList.query.filter_by(is_del=CommonConstant.default_status_false).count()
     server_count = JobServer.query.filter_by(status=CommonConstant.default_status_true).count()
     alert_count = JobAlertList.query.filter(JobAlertList.created_time.between(date, date + " 23:59:59")).count()
+
+    cate_map = ModelHelper.getDictFilterField( JobCategory )
+    cat_job_map = {}
+    job_list = JobList.query.with_entities(JobList.cate_id ,func.count( JobList.id) )\
+        .filter_by(is_del=CommonConstant.default_status_false)\
+        .group_by(JobList.cate_id).all()
+    if job_list:
+        for _item in job_list:
+            cat_job_map[ _item[0] ] = _item[1]
+
+
     return UtilHelper.renderView("home/index/index.html", {
         "job_count": job_count,
         "server_count": server_count,
-        "alert_count": alert_count
+        "alert_count": alert_count,
+        'cate_map' : cate_map,
+        'cat_job_map' : cat_job_map,
     })
 
 

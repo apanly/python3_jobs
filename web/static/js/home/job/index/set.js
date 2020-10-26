@@ -157,6 +157,9 @@ var index_set_ops = {
                     common_ops.tip("请输入预估最长运行时长~~", threshold_up_target );
                     return;
                 }
+                run_interval_target.val( 0 );
+                threshold_down_target.val( 0 );
+                threshold_up_target.val( 0 );
             }
 
 
