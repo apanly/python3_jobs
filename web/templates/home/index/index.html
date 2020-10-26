@@ -65,7 +65,7 @@
                         <div class="col-xs-12 col-md-12 col-lg-12">
                             {% for _cate_id,_cate_item in cate_map.items() %}
                             <div class="col-md-4 col-lg-4 col-xs-12">
-                                <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/index') }}?cate_id={{_cate_id}}" class="small-box bg-yellow">
+                                <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/index') }}?owner_uid=0&cate_id={{_cate_id}}" class="small-box bg-yellow">
                                     <div class="inner">
                                         <h1>{{ _cate_item['name'] }}</h1>
                                         <h2>{{ cat_job_map[_cate_id] }}</h2>
