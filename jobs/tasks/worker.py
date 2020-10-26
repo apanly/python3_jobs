@@ -12,6 +12,7 @@ from jobs.tasks.BaseJob import BaseJob
 python manage_job.py runjob -m worker -a reg -p server_id
 python manage_job.py runjob -m worker -a reg -jp '{"server_id":1}'
 python manage_job.py runjob -m worker -a update 
+python manage_job.py runjob -m worker -a logrotate 
 '''
 
 class JobTask( BaseJob ):

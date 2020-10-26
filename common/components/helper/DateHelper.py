@@ -117,6 +117,6 @@ class DateHelper(BaseService):
             retval += "%s分"%( min )
 
         if sec:
-            retval += "%s秒"%( sec )
+            retval += "%s秒"%( int(sec) )
         return retval
         
