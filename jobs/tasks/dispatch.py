@@ -25,7 +25,7 @@ class JobTask( BaseJob ):
         这里得考虑常驻Job，那么这个文件句柄就会被一直占用。如果日志按天设置，就会有老日志文件句柄被占
         所以这里的日志请需要使用logrotate进行切割就行了, 那就在/etc/logrotate.d/jobs配置
         '''
-        log_path = self.getLogPath( "dispatch.%s.log"% DateHelper.getCurrentTime( "%Y_%m_%d" ) )
+        log_path = self.getLogPath( "dispatch.log" )
         handler = logging.FileHandler( log_path , encoding='UTF-8')
         logging_format = logging.Formatter('%(levelname)s %(asctime)s %(filename)s:%(funcName)s L%(lineno)s %(message)s')
         handler.setFormatter(logging_format)
