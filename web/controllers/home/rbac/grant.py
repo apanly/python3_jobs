@@ -39,7 +39,9 @@ def grant_index():
     limit = CommonConstant.PAGE_SIZE * page
 
     list = query.order_by(Action.id.desc())[offset:limit]
-    sc = {}
+    sc = {
+        "kw": kw
+    }
     set_flag = RBACService.checkPageRelatePrivilege("set")
     ops_flag = RBACService.checkPageRelatePrivilege("ops")
     return UtilHelper.renderView("home/rbac/grant/index.html", {
