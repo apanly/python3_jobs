@@ -48,7 +48,7 @@ def home_release():
         {
             "title": "V1.2 上线",
             "date": "2020-10-20",
-            "content": "增加常驻Job<br/>核心调度Job日志使用crontab管理"
+            "content": "增加常驻Job<br/>核心调度Job日志使用logrotate管理"
         },
         {
             "title": "V1.1 上线",
