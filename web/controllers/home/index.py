@@ -46,6 +46,11 @@ def home_index():
 def home_release():
     release_list = [
         {
+            "title": "V1.2 上线",
+            "date": "2020-10-20",
+            "content": "增加常驻Job<br/>核心调度Job日志使用crontab管理"
+        },
+        {
             "title": "V1.1 上线",
             "date": "2020-10-14",
             "content": "增加Job分类管理，每个Job需要所属组<br/>增加钉钉和企业微信报警配置"
@@ -57,8 +62,8 @@ def home_release():
         },
         {
             "title": "V0.1",
-            "date": "2020-10-01",
-            "content": "基础功能（员工管理、RBAC、日志管理、站内信、网址之家等）基于个人开源Python3 CMS，详细前往： 网址"
+            "date": "2020-09-22",
+            "content": "基础功能（员工管理、RBAC、日志管理、站内信、网址之家等）基于个人开源Python3 CMS，<a target='_blank' href='http://dcenter.jixuejima.cn/#/flask/v2/readme'>详情点击了解</a>"
         }
     ]
     return UtilHelper.renderView("home/index/release.html",{

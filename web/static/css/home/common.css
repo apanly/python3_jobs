@@ -226,7 +226,7 @@ body{
         transform: translate(-160px, 0);
     }
 
-    .skin-blue .main-header .navbar .dropdown-menu li a {
+    .skin-purple .main-header .navbar .dropdown-menu li a {
         color: #0a0a0a;
     }
 }
