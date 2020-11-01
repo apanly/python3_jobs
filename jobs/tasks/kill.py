@@ -4,6 +4,7 @@ import logging,os,subprocess
 from flask.logging import default_handler
 
 from common.models.job.JobKillQueue import JobKillQueue
+from common.models.job.JobList import JobList
 from common.services.CommonConstant import CommonConstant
 from jobs.tasks.BaseJob import BaseJob
 from application import app
@@ -53,6 +54,10 @@ class JobTask( BaseJob ):
     杀死job的父进程 和子进程，我们只杀死子进程，父进程就会死掉
     '''
     def kill_process_with_children(self,job_id):
+        info = JobList.query.filter_by(id=job_id).first()
+        if not info:
+            app.logger.info("job_id:%s 没有查询到新" %(job_id) )
+            return True
         ##根据关键词找到的父id
         ppid = self.findPidByKw( job_id )
 
@@ -67,9 +72,17 @@ class JobTask( BaseJob ):
             return True
 
         output_arr = output.split('\n')
+        child_pid = 0
         for tmp_p in output_arr:
+            if info.command not in tmp_p:
+                continue
             tmp_process_arr = tmp_p.split(" ")
+            if tmp_process_arr[0] != ppid:
+                continue
+
             app.logger.info( tmp_p )
-            app.logger.info( tmp_process_arr )
+
+        app.logger.info( "子进程id：%s"% child_pid )
+
         return True
         
