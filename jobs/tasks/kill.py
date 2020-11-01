@@ -76,8 +76,9 @@ class JobTask( BaseJob ):
         for tmp_p in output_arr:
             if info.command not in tmp_p:
                 continue
+
             tmp_process_arr = tmp_p.split(" ")
-            if tmp_process_arr[0] != ppid:
+            if str(tmp_process_arr[0]) != str(ppid):
                 continue
 
             app.logger.info( tmp_p )
