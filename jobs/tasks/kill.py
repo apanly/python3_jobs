@@ -88,7 +88,7 @@ class JobTask( BaseJob ):
 
         app.logger.info( "job_id:%s 子进程id：%s"% (job_id,child_pid ) )
         if child_pid < 1:
-            app.logger.info("job_id:%s 未找到运行的子进程" )
+            app.logger.info("job_id:%s 未找到运行的子进程" % job_id )
             return False
 
         if not os.path.isdir("/proc/%s/" % child_pid ):
