@@ -68,6 +68,8 @@ class JobTask( BaseJob ):
 
         output_arr = output.split('\n')
         for tmp_p in output_arr:
+            tmp_process_arr = tmp_p.split('\t')
             app.logger.info( tmp_p )
+            app.logger.info( tmp_process_arr )
         return True
         
