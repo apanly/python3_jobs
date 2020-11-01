@@ -7,7 +7,7 @@ from common.models.job.JobKillQueue import JobKillQueue
 from common.models.job.JobList import JobList
 from common.services.CommonConstant import CommonConstant
 from jobs.tasks.BaseJob import BaseJob
-from application import app
+from application import app,db
 
 '''
 强制停止Job
@@ -46,8 +46,10 @@ class JobTask( BaseJob ):
 
         ##找到Job 杀死job
         for t in kill_list :
-            self.kill_process_with_children( t.job_id )
-
+            tmp_ret = self.kill_process_with_children( t.job_id )
+            t.status = CommonConstant.default_status_true if tmp_ret else CommonConstant.default_status_false
+            db.session.add( t )
+            db.session.commit()
 
         return True
     '''
@@ -62,7 +64,7 @@ class JobTask( BaseJob ):
         ppid = self.findPidByKw( job_id )
 
         if not os.path.isdir("/proc/%s/" % ppid ):
-            app.logger.info("父进程/proc/%s/不存在，进程已经退出,不再查询其子进程" % ppid )
+            app.logger.info("job_id:%s 父进程/proc/%s/不存在，进程已经退出,不再查询其子进程" % (job_id,ppid) )
             return True
 
         cmd = "ps -A -o ppid,pid,cmd | grep -v grep  |grep %s" % ppid
@@ -81,10 +83,22 @@ class JobTask( BaseJob ):
             if str(tmp_process_arr[0]) != str(ppid):
                 continue
 
-            child_pid = tmp_process_arr[1]
+            child_pid = int( tmp_process_arr[1])
             app.logger.info( tmp_p )
 
-        app.logger.info( "子进程id：%s"% child_pid )
+        app.logger.info( "job_id:%s 子进程id：%s"% (job_id,child_pid ) )
+        if child_pid < 1:
+            app.logger.info("job_id:%s 未找到运行的子进程" )
+            return False
 
+        if not os.path.isdir("/proc/%s/" % child_pid ):
+            app.logger.info("job_id:%s 子进程/proc/%s/不存在，进程已经退出,不再查询其子进程" % (job_id, child_pid) )
+            return False
+        try:
+            status = subprocess.check_call("kill -9 %s" % child_pid, shell=True)
+            if status != 0:
+                app.logger.info("job_id:%s 进程%s未能通过job平台正常退出，异常退出，退出状态为%d" % (job_id, child_pid,status ))
+        except Exception as e:
+            app.logger.info("job_id:%s kill 进程%s失败，可能已经退出" % (job_id, child_pid) )
         return True
         
