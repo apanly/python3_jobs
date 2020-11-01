@@ -81,6 +81,7 @@ class JobTask( BaseJob ):
             if str(tmp_process_arr[0]) != str(ppid):
                 continue
 
+            child_pid = tmp_process_arr[1]
             app.logger.info( tmp_p )
 
         app.logger.info( "子进程id：%s"% child_pid )
