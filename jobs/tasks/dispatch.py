@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-import os,time,atexit,sys,subprocess,math,logging
+import os,time,atexit,sys,subprocess,math,logging,datetime,time
 from flask.logging import default_handler
 from application import app,db
 from common.components.helper.DateHelper import DateHelper
@@ -206,14 +206,17 @@ class JobTask( BaseJob ):
                         JobList.query.filter_by(id=job_id).update( dict( run_status = CommonConstant.default_status_false,status = CommonConstant.default_status_false) )
                         db.session.commit()
                     else:
-                        tmp_next_time = t.next_run_time + int( math.ceil((time.time() - t.next_run_time) / (t.run_interval * 60)) * t.run_interval * 60)
+                        if t.job_type == CommonConstant.default_status_pos_2:  # 常驻Job，他停止之后下一分钟直接运行
+                            tmp_next_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
+                            tmp_next_time = tmp_next_time.replace(second=0)
+                            tmp_next_time = int( time.mktime(tmp_next_time.timetuple() ) )
+                        else:
+                            tmp_next_time = t.next_run_time + int( math.ceil((time.time() - t.next_run_time) / (t.run_interval * 60)) * t.run_interval * 60)
                         JobList.query.filter_by(id=job_id).update( dict( run_status = CommonConstant.default_status_true ,next_run_time =  tmp_next_time ) )
                         db.session.commit()
                 except:
                     app.logger.info( self.getErrMsg() )
                 # 完成
-
-
 
                 app.logger.info('job_id:%s 运行完成时间为：%s，子进程结束~~' % (job_id, DateHelper.getCurrentTime() ))
                 return 0
