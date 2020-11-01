@@ -138,7 +138,7 @@ class JobTask( BaseJob ):
 
     ##常驻进程获取内存大小
     def residentProcess(self,item_model ):
-        if item_model.job_type != CommonConstant.default_status_pos_2:
+        if item_model['job_type'] != CommonConstant.default_status_pos_2:
             return False
 
         job_id = item_model['id']
