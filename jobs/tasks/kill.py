@@ -1,6 +1,6 @@
 
 # -*- coding: utf-8 -*-
-import logging,os
+import logging,os,subprocess
 from flask.logging import default_handler
 
 from common.models.job.JobKillQueue import JobKillQueue
@@ -45,9 +45,24 @@ class JobTask( BaseJob ):
 
         ##找到Job 杀死job
         for t in kill_list :
-            ##根据关键词找到的父id
-            tmp_ppid = self.findPidByKw( t.job_id )
-            app.logger.info( tmp_ppid )
+            self.kill_process_with_children( t.job_id )
 
-        return True        
+
+        return True
+    '''
+    杀死job的父进程 和子进程，我们只杀死子进程，父进程就会死掉
+    '''
+    def kill_process_with_children(self,job_id):
+        ##根据关键词找到的父id
+        ppid = self.findPidByKw( job_id )
+        app.logger.info( ppid )
+
+        if not os.path.isdir("/proc/%s/" % ppid ):
+            app.logger.info("父进程/proc/%s/不存在，进程已经退出,不再查询其子进程" % ppid )
+            return True
+
+        cmd = "ps -A -o stat,ppid,pid,cmd | grep -v grep  |grep %s" % ppid
+        status, output = subprocess.getstatusoutput(cmd)
+        app.logger.info( output )
+        return True
         

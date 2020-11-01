@@ -105,3 +105,19 @@ VALUES
 
 
 ```
+
+#### 2020-11-01 郭威
+```
+CREATE TABLE `job_kill_queue` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `job_id` int NOT NULL DEFAULT '0' COMMENT 'job的id',
+  `server_id` int NOT NULL DEFAULT '0' COMMENT '服务器id',
+  `status` tinyint NOT NULL DEFAULT '-2' COMMENT '运行状态 -2：处理中 1：成功 0：失败',
+  `updated_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_status` (`status`),
+  KEY `idx_server_id` (`server_id`),
+  KEY `idx_job_id` (`job_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='杀死job队列';
+```
