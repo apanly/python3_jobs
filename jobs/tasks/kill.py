@@ -76,7 +76,9 @@ class JobTask( BaseJob ):
         output_arr = output.split('\n')
         child_pid = 0
         for tmp_p in output_arr:
+            app.logger.info(tmp_p)
             if info.command not in tmp_p:
+                app.logger.info("job_id:%s 没找到运行命令" % job_id)
                 continue
 
             tmp_process_arr = tmp_p.split(" ")
@@ -84,7 +86,7 @@ class JobTask( BaseJob ):
                 continue
 
             child_pid = int( tmp_process_arr[1])
-            app.logger.info( tmp_p )
+
 
         app.logger.info( "job_id:%s 子进程id：%s"% (job_id,child_pid ) )
         if child_pid < 1:
