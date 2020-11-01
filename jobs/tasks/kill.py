@@ -63,6 +63,11 @@ class JobTask( BaseJob ):
         cmd = "ps -A -o stat,ppid,pid,cmd | grep -v grep  |grep %s" % ppid
         app.logger.info( cmd )
         status, output = subprocess.getstatusoutput( cmd )
-        app.logger.info( output )
+        if len( output ) < 1:
+            return True
+
+        output_arr = output.split('\n')
+        for tmp_p in output_arr:
+            app.logger.info( tmp_p )
         return True
         
