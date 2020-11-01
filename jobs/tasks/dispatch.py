@@ -202,11 +202,11 @@ class JobTask( BaseJob ):
                     self.atexit_removepid(job_pid_file)
                     ##更新对应日志的log
                     JobService.updateRunLog( tmp_log_id,tmp_max_job_used_mem,( tmp_status == 0 ) )
-                    if t.job_type == CommonConstant.default_status_pos_3 :#一次性job
+                    if int( t.job_type ) == CommonConstant.default_status_pos_3 :#一次性job
                         JobList.query.filter_by(id=job_id).update( dict( run_status = CommonConstant.default_status_false,status = CommonConstant.default_status_false) )
                         db.session.commit()
                     else:
-                        if t.job_type == CommonConstant.default_status_pos_2:  # 常驻Job，他停止之后下一分钟直接运行
+                        if int( t.job_type ) == CommonConstant.default_status_pos_2:  # 常驻Job，他停止之后下一分钟直接运行
                             tmp_next_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
                             tmp_next_time = tmp_next_time.replace(second=0)
                             tmp_next_time = int( time.mktime(tmp_next_time.timetuple() ) )
