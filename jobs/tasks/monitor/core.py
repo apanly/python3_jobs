@@ -145,7 +145,6 @@ class JobTask( BaseJob ):
         pid_file = self.getPidPath('job_%s.pid' % job_id )
         pid = 0
         if self.checkPidExist(pid_file):
-            # 文件存储的是python的进程id，找真真运行的需要使用关键词查找
             pid = self.findPidByKw( job_id )
 
         info = JobRunLog.query.filter_by( job_id = job_id ,status = CommonConstant.default_status_neg_1 )\

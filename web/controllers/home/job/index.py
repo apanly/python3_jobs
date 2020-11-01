@@ -7,6 +7,7 @@ from common.components.helper.ModelHelper import ModelHelper
 from common.components.helper.UtilHelper import UtilHelper
 from common.components.helper.ValidateHelper import ValidateHelper
 from common.models.job.JobCategory import JobCategory
+from common.models.job.JobKillQueue import JobKillQueue
 from common.models.job.JobList import JobList
 from common.models.job.JobRunLog import JobRunLog
 from common.models.job.JobServer import JobServer
@@ -315,8 +316,6 @@ def job_set():
     if status:
         model_job.run_status = CommonConstant.default_status_true
 
-
-
     db.session.add( model_job )
     db.session.commit()
 
@@ -328,7 +327,7 @@ def job_ops():
     req = request.values
     id = int(req['id']) if ('id' in req and req['id']) else 0
     act = req.get("act","").strip()
-    allow_act = [ 'del','recovery','system_not_run','system_run','run_next' ]
+    allow_act = [ 'del','recovery','system_not_run','system_run','run_next','kill' ]
     if not id:
         return UtilHelper.renderErrJSON( CommonConstant.SYSTEM_DEFAULT_ERROR + " -1" )
 
@@ -339,7 +338,15 @@ def job_ops():
     if not info:
         return UtilHelper.renderErrJSON( "指定数据不存在" )
 
-    if info.run_status == CommonConstant.default_status_pos_2:
+    ##在增加一个判断，除了负责人和相关人外，还有管理严，其他人不能操作
+    allow_ops_uids = [ info.owner_uid,info.relate_uid ]
+    if not CurrentUserService.isRoot() and CurrentUserService.getUid() not in allow_ops_uids:
+        return UtilHelper.renderErrJSON("非Job负责人或者相关人禁止操作")
+
+    if act == "kill" and info.run_status != CommonConstant.default_status_pos_2:
+        return UtilHelper.renderErrJSON("强制杀死的job必须正在运行")
+
+    if act != "kill" and info.run_status == CommonConstant.default_status_pos_2:
         return UtilHelper.renderErrJSON("正在运行的Job不能操作")
 
     if act == "del":
@@ -363,6 +370,16 @@ def job_ops():
         next_date = next_date.replace(second=0)
         info.next_run_time = int( time.mktime( next_date.timetuple() ) )
         info.run_status = CommonConstant.default_status_true
+    elif act == "kill":
+        ##这里是杀死job的判断
+        has_not_handle = JobKillQueue.query.filter_by( job_id = info.id,status = CommonConstant.default_status_neg_2 ).count()
+        if has_not_handle:
+            return UtilHelper.renderErrJSON("该Job还有未执行的杀死任务，请等上一个执行完毕之后在点击~~")
+
+        model_kill = JobKillQueue()
+        model_kill.job_id = info.id
+        model_kill.server_id = info.server_id
+        db.session.add( model_kill )
 
     db.session.add( info )
     db.session.commit()

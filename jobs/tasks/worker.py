@@ -118,6 +118,8 @@ MAILTO=""
 ##监控Job
 * * * * * {{ . ~/.bash_jobs && python {1} runjob -m monitor/core  ;}} >> {2}/monitor_core.`date +\%Y_\%m_\%d`.log  2>&1
 * * * * * {{ . ~/.bash_jobs && python {1} runjob -m monitor/system  ;}} >> {2}/monitor_system.`date +\%Y_\%m_\%d`.log  2>&1
+##强制杀死Job
+* * * * * {{ . ~/.bash_jobs && python {1} runjob -m kill  ;}} >> {2}/kill.`date +\%Y_\%m_\%d`.log  2>&1
 ####{0}>>>####\n'''.format( kw,manage_file ,logs_dir)
 
         '''

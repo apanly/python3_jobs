@@ -121,7 +121,7 @@ def gii_job():
 # -*- coding: utf-8 -*-
 import logging
 from flask.logging import default_handler
-from jobs.BaseJob import BaseJob
+from jobs.tasks.BaseJob import BaseJob
 from application import app
 
 \'\'\'

@@ -69,7 +69,8 @@ class MenuService( BaseService):
                 "icon": "info",
                 "sub": [
                     {"title": "访问日志", "url": "/log/access"},
-                    {"title": "错误日志", "url": "/log/error"}
+                    {"title": "错误日志", "url": "/log/error"},
+                    {"title": "杀死队列", "url": "/log/kill"},
                 ]
             },
             "config": {
