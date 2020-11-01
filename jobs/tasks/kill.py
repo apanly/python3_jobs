@@ -60,7 +60,7 @@ class JobTask( BaseJob ):
             app.logger.info("父进程/proc/%s/不存在，进程已经退出,不再查询其子进程" % ppid )
             return True
 
-        cmd = "ps -A -o stat,ppid,pid,cmd | grep -v grep  |grep %s" % ppid
+        cmd = "ps -A -o ppid,pid,cmd | grep -v grep  |grep %s" % ppid
         app.logger.info( cmd )
         status, output = subprocess.getstatusoutput( cmd )
         if len( output ) < 1:
