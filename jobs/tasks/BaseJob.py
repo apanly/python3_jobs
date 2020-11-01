@@ -40,6 +40,7 @@ class BaseJob():
     def setPidFile(self,pid_path = '',pid = '0'):
         try:
             signal(SIGTERM, lambda signum, stack_frame: exit(1))
+            #只有正常结束 或者 调用sys.exit 才会执行 atexit注册的行数
             atexit.register(lambda: self.atexit_removepid(pid_path) )
             fd = os.open( pid_path, os.O_CREAT | os.O_EXCL | os.O_RDWR)
             os.write(fd, str.encode(  pid  ) )
@@ -48,6 +49,15 @@ class BaseJob():
             return False
 
         return True
+
+    def coverPidFile(self, pid_path = '',pid = 0):
+        try:
+            FileHelper.saveContent(pid_path, str.encode(  pid  ) )
+        except:
+            return False
+
+        return True
+
 
 
     #获取服务器的环境文件内容

@@ -89,7 +89,7 @@ class JobTask( BaseJob ):
                     app.logger.info("job_id:%s is running on  %s" % (job_id, host))
                     return 0
 
-                ## 建立具体job的pid 文件，防止重复运行
+                ## 建立具体job的pid 文件，防止重复运行，这个进程id其实记录的是不对的，应该使用下面的
                 tmp_pid = str(os.getpid())
                 if not self.setPidFile(job_pid_file, tmp_pid):
                     app.logger.info("job_id:%s 不能建立pid，path：%s，msg：%s" % (job_id, job_pid_file, self.getErrMsg()))
@@ -135,6 +135,9 @@ class JobTask( BaseJob ):
                 sp = subprocess.Popen(tmp_command, bufsize = -1, shell = True, close_fds=True, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
 
                 tmp_run_job_pid = sp.pid
+
+                #上面存的关于job的进程id 是不对的，这里在覆盖一次
+                self.coverPidFile(job_pid_file,tmp_run_job_pid)
                 '''
                     如果是包裹了一层runshell的需要找到进程的子进程pid，然后在查看内存
                     tmp_pid 是目前子进程的进程号

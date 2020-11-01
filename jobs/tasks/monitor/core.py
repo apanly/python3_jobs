@@ -7,7 +7,9 @@ from application import app, db
 from common.components.helper.DateHelper import DateHelper
 from common.components.helper.FileHelper import FileHelper
 from common.components.helper.ModelHelper import ModelHelper
+from common.components.helper.UtilHelper import UtilHelper
 from common.models.job.JobList import JobList
+from common.models.job.JobRunLog import JobRunLog
 from common.services.CommonConstant import CommonConstant
 from common.services.JobService import JobService
 from jobs.tasks.BaseJob import BaseJob
@@ -53,6 +55,8 @@ class JobTask( BaseJob ):
         self.current_time = time.time() - 300
         for item in list:
             self.handleItem( ModelHelper.model2Dict( item ),host )
+            self.residentProcess( ModelHelper.model2Dict( item ) )
+
 
         app.logger.info("it's over~~")
         return True
@@ -129,4 +133,27 @@ class JobTask( BaseJob ):
         if alert_content:
             app.logger.info(alert_content)
             JobService.saveAlertLog(item['id'],alert_content)
+        return True
+
+
+    ##常驻进程获取内存大小
+    def residentProcess(self,item_model ):
+        if item_model.job_type != CommonConstant.default_status_pos_2:
+            return False
+
+        job_id = item_model['id']
+        pid_file = self.getPidPath('job_%s.pid' % job_id )
+        pid = 0
+        if self.checkPidExist(pid_file):
+            # 文件存储的是python的进程id，找真真运行的需要使用关键词查找
+            pid = self.findPidByKw( job_id )
+
+        info = JobRunLog.query.filter_by( job_id = job_id ,status = CommonConstant.default_status_neg_1 )\
+            .order_by( JobRunLog.id.desc() ).limit(1).first()
+        if info:
+            job_used_mem = UtilHelper.getUsedMemory(pid)
+            info.max_mem = job_used_mem
+            db.session.add( info )
+            db.session.commit()
+
         return True
