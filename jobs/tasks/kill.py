@@ -1,6 +1,6 @@
 
 # -*- coding: utf-8 -*-
-import logging,os,subprocess
+import logging,os,subprocess,re
 from flask.logging import default_handler
 
 from common.models.job.JobKillQueue import JobKillQueue
@@ -81,7 +81,7 @@ class JobTask( BaseJob ):
                 app.logger.info("job_id:%s 没找到运行命令" % job_id)
                 continue
 
-            tmp_process_arr = tmp_p.split(" ")
+            tmp_process_arr = re.split("\s+",tmp_p.strip() )
             app.logger.info( tmp_process_arr )
             if str(tmp_process_arr[0]) != str(ppid):
                 continue
