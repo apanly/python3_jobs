@@ -50,9 +50,9 @@ class BaseJob():
 
         return True
 
-    def coverPidFile(self, pid_path = '',pid = 0):
+    def coverPidFile(self, pid_path = '',pid = '0' ):
         try:
-            FileHelper.saveContent(pid_path, str.encode(  pid  ) )
+            FileHelper.saveContent(pid_path, str( pid ) )
         except:
             return False
 
