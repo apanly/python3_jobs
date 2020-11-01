@@ -46,6 +46,11 @@ def home_index():
 def home_release():
     release_list = [
         {
+            "title": "V1.3 上线",
+            "date": "2020-11-01",
+            "content": "监控常驻job内存消耗<br/>强制杀死job"
+        },
+        {
             "title": "V1.2 上线",
             "date": "2020-10-20",
             "content": "增加常驻Job<br/>核心调度Job日志使用logrotate管理"

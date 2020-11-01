@@ -22,7 +22,7 @@
                             <form class="form-inline wrap_search">
                                 <div class="form-group">
                                     <select class="form-control" name="cate_id">
-                                        <option value="0">请选择分类</option>
+                                        <option value="0">分类</option>
                                         {% for _key,_item in cate_map.items() %}
                                         <option {% if _item.id == sc.cate_id  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}</option>
                                        {% endfor %}
@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="form-group">
                                     <select class="form-control" name="owner_uid">
-                                        <option value="0">请选择负责人</option>
+                                        <option value="0">负责人</option>
                                         {% for _key,_item in staff_map.items() %}
                                         <option {% if _item.id == sc.owner_uid  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}</option>
                                        {% endfor %}
@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="form-group">
                                     <select class="form-control" name="env_id">
-                                        <option value="0">请选择运行环境</option>
+                                        <option value="0">运行环境</option>
                                         {% for _key,_desc in server_env_map.items() %}
                                         <option {% if _key == sc.env_id  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
                                         {% endfor %}
@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="form-group" style="width:12%">
                                     <select class="form-control" name="server_id"  style="width:100%">
-                                        <option value="0">请选择服务器</option>
+                                        <option value="0">服务器</option>
                                         {% for _key,_item in server_map.items() %}
                                         <option {% if _item.id == sc.server_id  %} selected {% endif %} value="{{_item.id}}">{{_item.name}}[ {{_item.note}} ]</option>
                                         {% endfor %}
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="form-group">
                                     <select class="form-control" name="status">
-                                        <option value="{{ CommonConstant.default_status_neg_99 }}">请选择调度状态</option>
+                                        <option value="{{ CommonConstant.default_status_neg_99 }}">调度状态</option>
                                         {% for _key,_desc in job_status_map.items() %}
                                         <option {% if _key == sc.status  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
                                         {% endfor %}
@@ -63,15 +63,23 @@
 
                                 <div class="form-group">
                                     <select class="form-control" name="display_status">
-                                        <option value="{{ CommonConstant.default_status_neg_99 }}">请选择展示状态</option>
+                                        <option value="{{ CommonConstant.default_status_neg_99 }}">展示状态</option>
                                         {% for _key,_desc in display_status_map.items() %}
                                         <option {% if _key == sc.display_status  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <select class="form-control" name="job_type">
+                                        <option value="{{ CommonConstant.default_status_neg_99 }}">类型</option>
+                                        {% for _key,_desc in job_type_map.items() %}
+                                        <option {% if _key == sc.job_type  %} selected {% endif %} value="{{_key}}">{{_desc}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <input type="text" class="form-control col-sm-12 col-md-3 mb-2 mr-2" name="kw"
-                                           placeholder="请输入搜索关键词" value="{{sc['kw']}}">
+                                           placeholder="请输入搜索关键词、Job_id" value="{{sc['kw']}}">
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">搜索</button>

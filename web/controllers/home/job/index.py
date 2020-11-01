@@ -40,6 +40,7 @@ def job_index():
     server_id = int( req.get("server_id", CommonConstant.default_status_false) )
     status = int( req.get("status", CommonConstant.default_status_neg_99 ) )
     display_status = int( req.get("display_status", CommonConstant.default_status_neg_99 ) )
+    job_type = int( req.get("job_type", CommonConstant.default_status_neg_99 ) )
 
     kw = req.get("kw","").strip()
     page = int(req.get("p", 1))
@@ -69,9 +70,14 @@ def job_index():
     if display_status > CommonConstant.default_status_neg_99:
         query = query.filter_by( is_del = display_status )
 
+    if job_type > CommonConstant.default_status_neg_99:
+        query = query.filter_by( job_type = job_type )
 
     if kw:
-        query = query.filter( JobList.name.ilike( '%{}%'.format(kw) ) )
+        if kw.isdigit():
+            query = query.filter_by( id = int( kw ) )
+        else:
+            query = query.filter( JobList.name.ilike( '%{}%'.format(kw) ) )
 
     page_params = {
         "total": query.count(),
@@ -91,6 +97,7 @@ def job_index():
     staff_map = ModelHelper.getDictFilterField( User )
     server_env_map = CommonConstant.server_env_map
     run_status_map = CommonConstant.run_status_map
+    job_type_map = CommonConstant.job_type_map
     if list:
         for item in list:
             tmp_data = ModelHelper.model2Dict( item )
@@ -116,6 +123,7 @@ def job_index():
         'server_id' : server_id,
         'status' : status,
         'display_status' : display_status,
+        'job_type' : job_type,
     }
 
     set_flag = RBACService.checkPageRelatePrivilege("set")
@@ -129,6 +137,7 @@ def job_index():
         "staff_map":staff_map,
         "cate_map":cate_map,
         "display_status_map":display_status_map,
+        "job_type_map":job_type_map,
         "sc":sc ,
         "set_flag" : set_flag,
         "ops_flag" : ops_flag,

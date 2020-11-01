@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 APP_NAME = "Job管理调度平台"
-APP_VERSION = "V1.2"
+APP_VERSION = "V1.3"
 SERVER_PORT = 8889
 
 '''
