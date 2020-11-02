@@ -9,6 +9,7 @@ from flask.logging import default_handler
 from common.components.helper.ModelHelper import ModelHelper
 from common.models.job.JobAlertList import JobAlertList
 from common.models.job.JobList import JobList
+from common.models.rbac.User import User
 from common.services.CommonConstant import CommonConstant
 from common.services.SysConfigService import SysConfigService
 from common.services.notice.NewsService import NewsService
@@ -35,18 +36,31 @@ class JobTask( BaseJob ):
             return self.exitOK()
 
         job_ids = ModelHelper.getFieldList(list, "job_id")
-        job_map = ModelHelper.getDictFilterField(JobList, select_field=JobList.id, id_list=job_ids.sort())
+        job_map = ModelHelper.getDictFilterField(JobList, select_field=JobList.id, id_list= job_ids )
 
+        staff_ids = []
+        for _key,_item in job_map.items():
+            staff_ids.append( _item.owner_uid )
+            staff_ids.append( _item.relate_uid )
+
+        staff_map = ModelHelper.getDictFilterField(User, select_field= User.id, id_list= staff_ids)
         done_ids = []
         alert_content = [
             "Job异常报警"
         ]
+
         for item in list:
 
             tmp_data = ModelHelper.model2Dict( item )
             tmp_job_info = ModelHelper.model2Dict(job_map.get(tmp_data['job_id']))
+
+            #负责人和相关人用户信息
+            tmp_job_owner_info =  ModelHelper.model2Dict( staff_map.get( tmp_job_info['owner_uid'] ) )
+            tmp_job_relate_info =  ModelHelper.model2Dict( staff_map.get( tmp_job_info['relate_uid'] ) )
+
             done_ids.append(tmp_data['id'])
-            tmp_msg = "Job Id : {0},名称：{1},报警内容：{2}".format( tmp_job_info['id'],tmp_job_info['name'],tmp_data['content'] )
+            tmp_msg = "Job Id : {0},名称：{1},报警内容：{2},负责人：{3},相关人：{4}"\
+                .format( tmp_job_info['id'],tmp_job_info['name'],tmp_data['content'],tmp_job_owner_info['name'],tmp_job_relate_info['name'] )
             if 'Job平台标识没有运行'  in tmp_msg or 'Job平台标识正在运行'  in tmp_msg:
                 continue
 

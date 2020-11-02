@@ -11,7 +11,7 @@ class ModelHelper(BaseService):
         ret = {}
         query = db_model.query
         if id_list and len( id_list ) > 0:
-            query = query.filter( select_field.in_( id_list ) )
+            query = query.filter( select_field.in_( ModelHelper.getUniqList( id_list ) ) )
 
         list = query.all()
         if not list:
@@ -32,7 +32,7 @@ class ModelHelper(BaseService):
         ret = {}
         query = db_model.query
         if id_list and len( id_list ) > 0:
-            query = query.filter( select_filed.in_( id_list ) )
+            query = query.filter( select_filed.in_( ModelHelper.getUniqList( id_list ) ) )
 
         list = query.all()
         if not list:
@@ -73,3 +73,9 @@ class ModelHelper(BaseService):
         from sqlalchemy.orm import class_mapper
         columns = [c.key for c in class_mapper(model.__class__).columns]
         return dict((c, getattr(model, c)) for c in columns)
+
+    @staticmethod
+    def getUniqList( id_list = None ):
+        if id_list and len(id_list) > 0:
+            return list( set(id_list) )
+        return id_list
