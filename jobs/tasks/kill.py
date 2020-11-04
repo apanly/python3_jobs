@@ -60,6 +60,16 @@ class JobTask( BaseJob ):
         if not info:
             app.logger.info("job_id:%s 没有查询到新" %(job_id) )
             return True
+
+        ##如果填写了杀死命令，那么就用杀死命令执行
+        if info.command_kill:
+            try:
+                status = subprocess.check_call("kill -9 %s" % info.command_kill, shell=True)
+                if status != 0:
+                    app.logger.info("job_id:%s 命令：%s 未能通过job平台正常退出，异常退出，退出状态为%d" % (job_id, info.command_kill, status))
+            except Exception as e:
+                app.logger.info("job_id:%s kill 命令：%s  失败，可能已经退出" % (job_id, info.command_kill ) )
+            return True
         ##根据关键词找到的父id
         ppid = self.findPidByKw( job_id )
 
