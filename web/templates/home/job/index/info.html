@@ -7,6 +7,8 @@
             Job详情：{{ info.name }}
             <a class="pull-right" href="{{ GlobalUrlService.buildHomeUrl('/job/index/index') }}">返回</a>
             <a class="pull-right mr-5"
+               href="{{ GlobalUrlService.buildHomeUrl('/job/index/set') }}?act=copy&id={{info.id}}">复制</a>
+            <a class="pull-right mr-5"
                href="{{ GlobalUrlService.buildHomeUrl('/job/index/set') }}?id={{info.id}}">编辑</a>
         </h3>
     </div>
