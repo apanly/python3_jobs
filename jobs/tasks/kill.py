@@ -65,7 +65,7 @@ class JobTask( BaseJob ):
         if info.command_kill:
             app.logger.info( "job_id:%s 配置了杀死命令：%s" %( job_id, info.command_kill) )
             try:
-                status = subprocess.check_call("kill -9 %s" % info.command_kill, shell=True)
+                status = subprocess.check_call( info.command_kill, shell=True)
                 if status != 0:
                     app.logger.info("job_id:%s 命令：%s 未能通过job平台正常退出，异常退出，退出状态为%d" % (job_id, info.command_kill, status))
             except Exception as e:
