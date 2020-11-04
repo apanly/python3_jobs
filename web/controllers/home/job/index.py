@@ -369,7 +369,13 @@ def job_ops():
         #如果可以调度了，是不是要把调度时间改成下一个周期
         info.status = CommonConstant.default_status_true
         info.run_status = CommonConstant.default_status_true
-        info.next_run_time = info.next_run_time + int( math.ceil((time.time() - info.next_run_time) / (info.run_interval * 60)) * info.run_interval * 60)
+        if int( info.job_type) == CommonConstant.default_status_pos_2:  # 常驻Job，他停止之后下一分钟直接运行
+            next_date = datetime.datetime.now() + datetime.timedelta(minutes=1)
+            next_date = next_date.replace(second=0)
+            tmp_next_time = int( time.mktime( next_date.timetuple() ) )
+        else:
+            tmp_next_time = info.next_run_time + int( math.ceil((time.time() - info.next_run_time) / (info.run_interval * 60)) * info.run_interval * 60)
+        info.next_run_time = tmp_next_time
     elif act == "run_next":
 
         if not info.status :
