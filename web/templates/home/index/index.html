@@ -100,7 +100,13 @@
                                 <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/index') }}?owner_uid=0&cate_id={{_cate_id}}" class="small-box bg-yellow">
                                     <div class="inner">
                                         <h1>{{ _cate_item['name'] }}</h1>
-                                        <h2>{{ cat_job_map[_cate_id] }}</h2>
+                                        <h2>
+                                            {% if _cate_id  in cat_job_map %}
+                                                {{ cat_job_map[_cate_id] }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </h2>
                                     </div>
                                     <div class="icon">
                                         <i class="fa fa-bar-chart"></i>

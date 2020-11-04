@@ -63,6 +63,7 @@ class JobTask( BaseJob ):
 
         ##如果填写了杀死命令，那么就用杀死命令执行
         if info.command_kill:
+            app.logger.info( "job_id:%s 配置了杀死命令：%s" %( job_id, info.command_kill) )
             try:
                 status = subprocess.check_call("kill -9 %s" % info.command_kill, shell=True)
                 if status != 0:
