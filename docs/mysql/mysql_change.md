@@ -121,3 +121,8 @@ CREATE TABLE `job_kill_queue` (
   KEY `idx_job_id` (`job_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='杀死job队列';
 ```
+
+#### 2020-11-04 郭威
+```
+ALTER TABLE `job_list` ADD `command_kill` VARCHAR(255)  NOT NULL  DEFAULT ''  COMMENT '强制停止job的杀死命令'  AFTER `command`;
+```

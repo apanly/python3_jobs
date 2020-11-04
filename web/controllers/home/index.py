@@ -25,13 +25,21 @@ def home_index():
 
     cate_map = ModelHelper.getDictFilterField( JobCategory )
     cat_job_map = {}
-    job_list = JobList.query.with_entities(JobList.cate_id ,func.count( JobList.id) )\
+    cat_job_list = JobList.query.with_entities(JobList.cate_id ,func.count( JobList.id) )\
         .filter_by(is_del=CommonConstant.default_status_false)\
         .group_by(JobList.cate_id).all()
-    if job_list:
-        for _item in job_list:
+    if cat_job_list:
+        for _item in cat_job_list:
             cat_job_map[ _item[0] ] = _item[1]
 
+    type_job_map = {}
+    job_type_map = CommonConstant.job_type_map
+    type_job_list = JobList.query.with_entities(JobList.job_type, func.count(JobList.id)) \
+        .filter_by(is_del=CommonConstant.default_status_false) \
+        .group_by(JobList.job_type).all()
+    if type_job_list:
+        for _item in type_job_list:
+            type_job_map[ _item[0] ] = _item[1]
 
     return UtilHelper.renderView("home/index/index.html", {
         "job_count": job_count,
@@ -39,6 +47,8 @@ def home_index():
         "alert_count": alert_count,
         'cate_map' : cate_map,
         'cat_job_map' : cat_job_map,
+        'job_type_map' : job_type_map,
+        'type_job_map' : type_job_map,
     })
 
 

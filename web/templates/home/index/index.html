@@ -58,6 +58,32 @@
         <div class="col-md-12 col-lg-12 col-sm-12">
             <div class="box box-solid">
                 <div class="box-header with-border">
+                    <h3 class="box-title">运行类型统计</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12">
+                            {% for _job_type_id,_job_type_title in job_type_map.items() %}
+                            <div class="col-md-4 col-lg-4 col-xs-12">
+                                <a href="{{ GlobalUrlService.buildHomeUrl('/job/index/index') }}?owner_uid=0&job_type={{_job_type_id}}" class="small-box bg-yellow">
+                                    <div class="inner">
+                                        <h1>{{ _job_type_title }}</h1>
+                                        <h2>{{ type_job_map[_job_type_id] }}</h2>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-bar-chart"></i>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="box box-solid">
+                <div class="box-header with-border">
                     <h3 class="box-title">分类统计</h3>
                 </div>
                 <div class="box-body">

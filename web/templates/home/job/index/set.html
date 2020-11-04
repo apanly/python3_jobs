@@ -94,6 +94,17 @@
                 </div>
                 <div class="col-xs-12 col-md-12 col-lg-12">
                     <div class="form-group">
+                        <label class="col-xs-2 col-md-2 col-lg-2 control-label">终止命令</label>
+                        <div class="col-xs-10 col-md-10 col-lg-10">
+                            <input type="text" class="form-control" name="command_kill" placeholder="【选填】请输入Job终止命令，主要用于强制停止Job使用~~" value="{{ info.command_kill }}">
+                            <label class="control-label">
+                                注意: 强制终止Job时候使用，如不填写直接kill -9
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <div class="form-group">
                         <label  class="col-xs-2 col-md-2 col-lg-2 control-label">类型</label>
                         <div class="col-xs-6 col-md-6 col-lg-6">
                             <select class="form-control" name="job_type">

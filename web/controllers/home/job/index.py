@@ -235,6 +235,7 @@ def job_set():
     owner_uid = int(req.get("owner_uid", "0" ).strip())
     relate_uid = int(req.get("relate_uid", "0" ).strip())
     command = req.get("command","").strip()
+    command_kill = req.get("command_kill","").strip()
     job_type = int(req.get("job_type", "0" ).strip())
     status = int(req.get("status", "0" ).strip())
     next_run_time = req.get("next_run_time","").strip()
@@ -317,6 +318,7 @@ def job_set():
     model_job.job_type = job_type
     model_job.cate_id = cate_id
     model_job.command = command
+    model_job.command_kill = command_kill
     model_job.next_run_time = DateHelper.getTimestamps( next_run_time + ":00" )
     model_job.run_interval = run_interval
     model_job.threshold_up = threshold_up

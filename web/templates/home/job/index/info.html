@@ -25,9 +25,15 @@
                             <td>{% if info.cate_name %}【{{ info.cate_name }}】{% endif %}{{ info.name }}</td>
                         </tr>
                         <tr>
-                            <td>命令</td>
+                            <td>运行命令</td>
                             <td>{{ info.command }}</td>
                         </tr>
+                        {% if info.command_kill %}
+                        <tr>
+                            <td>终止命令</td>
+                            <td>{{ info.command_kill }}</td>
+                        </tr>
+                        {% endif %}
                         <tr>
                             <td>服务器</td>
                             <td>{{ info.server_name }} / {{ info.env_name }}</td>
