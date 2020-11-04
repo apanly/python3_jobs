@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import  datetime,time,math
 from flask import Blueprint,request,redirect
+from sqlalchemy import or_,and_
 from application import db
 from common.components.helper.DateHelper import DateHelper
 from common.components.helper.ModelHelper import ModelHelper
@@ -77,7 +78,7 @@ def job_index():
         if kw.isdigit():
             query = query.filter_by( id = int( kw ) )
         else:
-            query = query.filter( JobList.name.ilike( '%{}%'.format(kw) ) )
+            query = query.filter( or_( JobList.name.ilike( '%{}%'.format(kw) ) ,JobList.command.ilike( '%{}%'.format(kw) ) ))
 
     page_params = {
         "total": query.count(),
