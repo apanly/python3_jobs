@@ -73,7 +73,7 @@ def log_kill():
     date_from = req.get("date_from", DateHelper.getCurrentTime(fmt="%Y-%m-%d"))
     date_to = req.get("date_to", DateHelper.getCurrentTime(fmt="%Y-%m-%d"))
     status = int(req.get("status", CommonConstant.default_status_neg_99))
-    query = JobKillQueue.query.filter(AppErrLog.created_time.between(date_from, date_to + " 23:59:59"))
+    query = JobKillQueue.query.filter(JobKillQueue.created_time.between(date_from, date_to + " 23:59:59"))
 
     if status > CommonConstant.default_status_neg_99:
         query = query.filter_by(status=status)
