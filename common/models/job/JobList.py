@@ -10,6 +10,7 @@ class JobList(db.Model):
     owner_uid = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue(), info='负责人uid')
     relate_uid = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue(), info='相关人uid')
     job_type = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue(), info='类型 1：周期性 2：常驻 3：一次性')
+    job_level = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue(), info='级别 1：一般 2：重要 3：紧急')
     cate_id = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue(), info='分类id')
     command = db.Column(db.String(255, 'utf8mb4_general_ci'), nullable=False, server_default=db.FetchedValue(), info='运行命令')
     command_kill = db.Column(db.String(255, 'utf8mb4_general_ci'), nullable=False, server_default=db.FetchedValue(), info='强制停止job的杀死命令')

@@ -59,8 +59,10 @@ class JobTask( BaseJob ):
             tmp_job_relate_info =  ModelHelper.model2Dict( staff_map.get( tmp_job_info['relate_uid'] ) )
 
             done_ids.append(tmp_data['id'])
-            tmp_msg = "Job Id : {0},名称：{1},报警内容：{2},负责人：{3},相关人：{4}"\
-                .format( tmp_job_info['id'],tmp_job_info['name'],tmp_data['content'],tmp_job_owner_info['name'],tmp_job_relate_info['name'] )
+            tmp_msg = "Job Id : {0},名称：{1},报警内容：{2},负责人：{3},相关人：{4},重要级别：{5}"\
+                .format( tmp_job_info['id'],tmp_job_info['name'],tmp_data['content']
+                         ,tmp_job_owner_info['name'],tmp_job_relate_info['name']
+                         ,CommonConstant.job_level_map[ tmp_job_info['job_level'] ])
             if 'Job平台标识没有运行'  in tmp_msg or 'Job平台标识正在运行'  in tmp_msg:
                 continue
 

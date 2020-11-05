@@ -27,6 +27,10 @@
                             <td>{% if info.cate_name %}【{{ info.cate_name }}】{% endif %}{{ info.name }}</td>
                         </tr>
                         <tr>
+                            <td>重要级别</td>
+                            <td>{{ job_level_map[ info.job_level ] }}</td>
+                        </tr>
+                        <tr>
                             <td>运行命令</td>
                             <td>{{ info.command }}</td>
                         </tr>

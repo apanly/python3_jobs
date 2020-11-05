@@ -125,4 +125,5 @@ CREATE TABLE `job_kill_queue` (
 #### 2020-11-04 郭威
 ```
 ALTER TABLE `job_list` ADD `command_kill` VARCHAR(255)  NOT NULL  DEFAULT ''  COMMENT '强制停止job的杀死命令'  AFTER `command`;
+ALTER TABLE `job_list` ADD `job_level` TINYINT  NOT NULL  DEFAULT '1'  COMMENT '级别 1：一般 2：重要 3：紧急'  AFTER `job_type`;
 ```

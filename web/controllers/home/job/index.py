@@ -42,6 +42,7 @@ def job_index():
     status = int( req.get("status", CommonConstant.default_status_neg_99 ) )
     display_status = int( req.get("display_status", CommonConstant.default_status_neg_99 ) )
     job_type = int( req.get("job_type", CommonConstant.default_status_neg_99 ) )
+    job_level = int( req.get("job_level", CommonConstant.default_status_neg_99 ) )
 
     kw = req.get("kw","").strip()
     page = int(req.get("p", 1))
@@ -74,6 +75,9 @@ def job_index():
     if job_type > CommonConstant.default_status_neg_99:
         query = query.filter_by( job_type = job_type )
 
+    if job_level > CommonConstant.default_status_neg_99:
+        query = query.filter_by( job_level = job_level )
+
     if kw:
         if kw.isdigit():
             query = query.filter_by( id = int( kw ) )
@@ -99,6 +103,7 @@ def job_index():
     server_env_map = CommonConstant.server_env_map
     run_status_map = CommonConstant.run_status_map
     job_type_map = CommonConstant.job_type_map
+    job_level_map = CommonConstant.job_level_map
     if list:
         for item in list:
             tmp_data = ModelHelper.model2Dict( item )
@@ -125,6 +130,7 @@ def job_index():
         'status' : status,
         'display_status' : display_status,
         'job_type' : job_type,
+        'job_level' : job_level,
     }
 
     set_flag = RBACService.checkPageRelatePrivilege("set")
@@ -139,6 +145,7 @@ def job_index():
         "cate_map":cate_map,
         "display_status_map":display_status_map,
         "job_type_map":job_type_map,
+        "job_level_map":job_level_map,
         "sc":sc ,
         "set_flag" : set_flag,
         "ops_flag" : ops_flag,
@@ -190,6 +197,7 @@ def job_info():
         "info": info,
         "log_list":log_data,
         "user_map": user_map,
+        "job_level_map": CommonConstant.job_level_map,
     })
 
 
@@ -224,6 +232,7 @@ def job_set():
             "server_env_map": CommonConstant.server_env_map,
             "job_type_map": CommonConstant.job_type_map,
             "job_status_map": job_status_map,
+            "job_level_map": CommonConstant.job_level_map,
         })
 
     req = request.values
@@ -237,6 +246,7 @@ def job_set():
     command = req.get("command","").strip()
     command_kill = req.get("command_kill","").strip()
     job_type = int(req.get("job_type", "0" ).strip())
+    job_level = int(req.get("job_level", "1" ).strip())
     status = int(req.get("status", "0" ).strip())
     next_run_time = req.get("next_run_time","").strip()
     run_interval = int(req.get("run_interval", "0" ).strip())
@@ -316,6 +326,7 @@ def job_set():
     model_job.owner_uid = owner_uid
     model_job.relate_uid = relate_uid
     model_job.job_type = job_type
+    model_job.job_level = job_level
     model_job.cate_id = cate_id
     model_job.command = command
     model_job.command_kill = command_kill

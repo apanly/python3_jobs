@@ -102,8 +102,8 @@ var index_set_ops = {
                 return;
             }
 
-            if( !common_ops.validate.length( name,1,15 )) {
-                common_ops.tip("请输入符合规范的名称，长度不大于15个字符~~", name_target);
+            if( !common_ops.validate.length( name,1,20 )) {
+                common_ops.tip("请输入符合规范的名称，长度不大于20个字符~~", name_target);
                 return;
             }
 

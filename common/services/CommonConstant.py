@@ -101,6 +101,12 @@ class CommonConstant(BaseService):
         1: "运行成功"
     }
 
+    job_level_map = {
+        1: "一般",
+        2: "重要",
+        3: "紧急",
+    }
+
 
     config_dingding = "dingding"
     config_workwechat = "wechat_work"
