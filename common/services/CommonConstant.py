@@ -102,9 +102,9 @@ class CommonConstant(BaseService):
     }
 
     job_level_map = {
-        1: "一般",
-        2: "重要",
-        3: "紧急",
+        1: "L1：一般",
+        2: "L2：重要",
+        3: "L3：紧急",
     }
 
 
