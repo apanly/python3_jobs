@@ -325,7 +325,7 @@ def job_set():
     model_job.threshold_down = threshold_down
     model_job.note = note
     model_job.status = status
-    if status:
+    if status and ( not info or not info.run_status):
         model_job.run_status = CommonConstant.default_status_true
 
     db.session.add( model_job )
