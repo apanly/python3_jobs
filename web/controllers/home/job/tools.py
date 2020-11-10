@@ -67,7 +67,7 @@ def tools_log():
                 tmp_data['end_time'] = "未知"
                 tmp_data['duration'] = time.time() - time.mktime( tmp_data['start_time'].timetuple() )
             else:
-                tmp_data['duration'] = ( tmp_data['end_time'] - tmp_data['start_time'] ).seconds
+                tmp_data['duration'] = ( tmp_data['end_time'].timestamp() - tmp_data['start_time'].timestamp() )
             tmp_data['duration'] = DateHelper.formatBeautyTime( tmp_data['duration'])
 
             data.append(tmp_data)
