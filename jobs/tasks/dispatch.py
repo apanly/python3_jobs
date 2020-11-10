@@ -188,6 +188,7 @@ class JobTask( BaseJob ):
                 #和下面分开就是怕报警影响正常处理
                 try:
                     #杀死常驻job也会发生 MySQL server has gone away，只要运行的时间太长就会出问题了
+                    db.session.remove()
                     db.get_engine(app=app).dispose()
                     #相关报警判断
                     self.alertStatusJudge(t, tmp_status)
