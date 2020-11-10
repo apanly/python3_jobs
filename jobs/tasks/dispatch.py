@@ -200,8 +200,6 @@ class JobTask( BaseJob ):
                 try:
                     ##提前将文件释放下，因为当服务器状态非常繁忙的时候，进程比较缓慢，会导致状态已经更新但是pid文件没有删除
                     self.atexit_removepid(job_pid_file)
-                    ##更新对应日志的log
-                    JobService.updateRunLog( tmp_log_id,tmp_max_job_used_mem,( tmp_status == 0 ) )
                     if int( t.job_type ) == CommonConstant.default_status_pos_3 :#一次性job
                         JobList.query.filter_by(id=job_id).update( dict( run_status = CommonConstant.default_status_false,status = CommonConstant.default_status_false) )
                         db.session.commit()
@@ -214,6 +212,9 @@ class JobTask( BaseJob ):
                             tmp_next_time = t.next_run_time + int( math.ceil((time.time() - t.next_run_time) / (t.run_interval * 60)) * t.run_interval * 60)
                         JobList.query.filter_by(id=job_id).update( dict( run_status = CommonConstant.default_status_true ,next_run_time =  tmp_next_time ) )
                         db.session.commit()
+
+                    ##更新对应日志的log,担心出错影响其他
+                    JobService.updateRunLog(tmp_log_id, tmp_max_job_used_mem, (tmp_status == 0))
                 except:
                     app.logger.info( self.getErrMsg() )
                 # 完成
