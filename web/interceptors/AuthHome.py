@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from application import app
+from application import app,db
 from flask import request,redirect,g,make_response
 import re
 
@@ -55,7 +55,8 @@ def before_request():
 
 @app.after_request
 def after_request( response ):
-    #清理收尾工作
+    #清理收尾工作，数据库用完就得清理
+    db.get_engine(app=app).dispose()
     return response
 
 def check_login():

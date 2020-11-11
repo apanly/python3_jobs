@@ -9,7 +9,6 @@ from common.models.job.JobList import JobList
 from common.services.CommonConstant import CommonConstant
 from common.services.JobService import JobService
 from jobs.tasks.BaseJob import BaseJob
-
 '''
 调度核心Job
 python manage_job.py runjob -m dispatch
@@ -33,6 +32,7 @@ class JobTask( BaseJob ):
 
         ##默认的还是继续输出
         default_handler.setFormatter(logging_format)
+
 
     def run(self, params):
         pid_path = self.getPidPath('dispatch.pid')
@@ -71,18 +71,11 @@ class JobTask( BaseJob ):
             多进程（os.fork()）下，子进程会继承父进程的连接，所以会有问题.先销毁已有的engine，确保父进程没有数据库连接
             相关错误：Mysql server has gone away
             '''
-            db.get_engine(app=app).dispose()
+            self.closePoolDB()
 
             pid = os.fork()
             if pid == 0: #子进程,这里是一个独立进程（在复制出来的那一刻 所有变量都会共享到子进程）,所以写代码 就要感觉在一个独立方法中
-                #
-                '''
-                错误
-                sqlalchemy.exc.InvalidRequestError: This session is in 'prepared' state; 
-                no further SQL can be emitted within this transaction.
-                '''
-                db.session.remove()
-                #db.session.close()
+                self.closePoolDB()
                 job_id = t.id
                 job_pid_file = self.getPidPath( 'job_%s.pid' % job_id )
                 if self.checkPidExist(job_pid_file):
@@ -122,6 +115,8 @@ class JobTask( BaseJob ):
                     tmp_log_id = JobService.addRunLog( tmp_log_params )
                 except :
                     pass
+
+                self.closePoolDB()
 
                 tmp_job_run_start_time = time.time()  # job开始运行的时间
                 # t.command无法获取job内部输出的内容，我们需要按行读取或者按buffer读取的
@@ -188,8 +183,7 @@ class JobTask( BaseJob ):
                 #和下面分开就是怕报警影响正常处理
                 try:
                     #杀死常驻job也会发生 MySQL server has gone away，只要运行的时间太长就会出问题了
-                    db.session.remove()
-                    db.get_engine(app=app).dispose()
+                    self.closePoolDB()
                     #相关报警判断
                     self.alertStatusJudge(t, tmp_status)
                     self.alertRunTimeJudge(t, tmp_job_run_start_time)
@@ -199,6 +193,7 @@ class JobTask( BaseJob ):
 
                 # 更新状态和下一次运行时间
                 try:
+                    self.closePoolDB()
                     ##提前将文件释放下，因为当服务器状态非常繁忙的时候，进程比较缓慢，会导致状态已经更新但是pid文件没有删除
                     self.atexit_removepid(job_pid_file)
                     if int( t.job_type ) == CommonConstant.default_status_pos_3 :#一次性job
@@ -219,6 +214,7 @@ class JobTask( BaseJob ):
                 except:
                     app.logger.info( self.getErrMsg() )
                 # 完成
+                self.closePoolDB()
 
                 app.logger.info('job_id:%s 运行完成时间为：%s，子进程结束~~' % (job_id, DateHelper.getCurrentTime() ))
                 return 0
@@ -290,4 +286,19 @@ class JobTask( BaseJob ):
             return "找不到指定命令"
         elif exit_code > 128:  # 128+signal
             return "强制退出"
+
+    def closePoolDB(self):
+        '''
+        错误
+        sqlalchemy.exc.InvalidRequestError: This session is in 'prepared' state;
+        no further SQL can be emitted within this transaction.
+        Mysql server has gone away
+        Lost connection to MySQL server during query
+        '''
+        try:
+            db.session.remove()
+            db.get_engine(app=app).dispose()
+        except:
+            app.logger.info( "close db ,err_msg : " + self.getErrMsg())
+        return True
 
