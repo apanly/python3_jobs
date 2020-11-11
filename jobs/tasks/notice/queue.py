@@ -8,6 +8,7 @@ from flask.logging import default_handler
 
 from common.components.helper.ModelHelper import ModelHelper
 from common.models.job.JobAlertList import JobAlertList
+from common.models.job.JobCategory import JobCategory
 from common.models.job.JobList import JobList
 from common.models.rbac.User import User
 from common.services.CommonConstant import CommonConstant
@@ -49,6 +50,7 @@ class JobTask( BaseJob ):
             "Job异常报警"
         ]
 
+        cate_map = ModelHelper.getDictFilterField(JobCategory)
         for item in list:
 
             tmp_data = ModelHelper.model2Dict( item )
@@ -58,11 +60,18 @@ class JobTask( BaseJob ):
             tmp_job_owner_info =  ModelHelper.model2Dict( staff_map.get( tmp_job_info['owner_uid'] ) )
             tmp_job_relate_info =  ModelHelper.model2Dict( staff_map.get( tmp_job_info['relate_uid'] ) )
 
+            #分类
+            tmp_cate_info = ModelHelper.model2Dict( cate_map.get( tmp_job_info['cate_id'] ) )
+
             done_ids.append(tmp_data['id'])
-            tmp_msg = "Job Id : {0},名称：{1},报警内容：{2},负责人：{3},相关人：{4},重要级别：{5}"\
-                .format( tmp_job_info['id'],tmp_job_info['name'],tmp_data['content']
+            tmp_msg = "Job Id: {0},名称：[{1}]{2},负责人：{3},相关人：{4},重要级别：{5},类型：{6},报警内容：{7}"\
+                .format( tmp_job_info['id'],tmp_cate_info['name'],tmp_job_info['name']
                          ,tmp_job_owner_info['name'],tmp_job_relate_info['name']
-                         ,CommonConstant.job_level_map[ tmp_job_info['job_level'] ])
+                         ,CommonConstant.job_level_map[ tmp_job_info['job_level'] ]
+                         ,CommonConstant.job_type_map[ tmp_job_info['job_type'] ]
+                         , tmp_data['content']
+                         )
+            
             if 'Job平台标识没有运行'  in tmp_msg or 'Job平台标识正在运行'  in tmp_msg:
                 continue
 
