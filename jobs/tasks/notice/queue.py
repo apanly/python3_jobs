@@ -71,7 +71,7 @@ class JobTask( BaseJob ):
                          ,CommonConstant.job_type_map[ tmp_job_info['job_type'] ]
                          , tmp_data['content']
                          )
-            
+
             if 'Job平台标识没有运行'  in tmp_msg or 'Job平台标识正在运行'  in tmp_msg:
                 continue
 

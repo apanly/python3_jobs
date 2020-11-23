@@ -47,8 +47,8 @@ IGNORE_CHECK_LOGIN_URLS = [
 ##HTTP请求超时时间
 HTTP_TIMEOUT = 5
 
-##日志存放位置
-LOG_ROOT_PATH = "/tmp/logs/python3_jobs"
+##日志存放位置 一定不能放在
+LOG_ROOT_PATH = "/data/www/logs/python3_jobs"
 ##版本号文件
 RELEASE_PATH = "/data/www/release_version/python3_jobs"
 

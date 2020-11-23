@@ -9,3 +9,4 @@ config/local_setting.py
 config/hsh_setting.py
 config/pro_setting.py
 config/test_setting.py
+config/*_production_setting.py
