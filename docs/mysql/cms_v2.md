@@ -1,4 +1,4 @@
-### 数据库变更历史
+### v2 数据库初始化
 
 ```
 CREATE DATABASE `p3_jobs_db` DEFAULT COLLATE = `utf8mb4_general_ci`;
