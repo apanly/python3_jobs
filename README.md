@@ -1,7 +1,7 @@
 ## Jobs（乔布斯）管理调度平台
 
 <p align="center" >
-    <img src="http://static.cdn.jixuejima.cn/images/weiyu/learn_code.jpg" width="150">
+    <img src="./web/static/images/learn_code.jpg" width="150">
     <h3 align="center">Jobs（乔布斯）管理调度平台</h3>
     <p align="center">
         是一个多客户端任务调度平台，其核心设计目标是开发迅速、学习简单、轻量级、易扩展。现已开放源代码使用开源协议 GPL V3，开箱即用.
