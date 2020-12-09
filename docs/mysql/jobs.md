@@ -68,6 +68,18 @@ CREATE TABLE `job_run_log` (
   KEY `idx_job_id_created_time` (`job_id`,`created_time`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='job运行日志';
 
+CREATE TABLE `job_alert_list` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `job_id` int(11) NOT NULL COMMENT 'job的id',
+  `content` varchar(500) NOT NULL DEFAULT '' COMMENT '报警内容',
+  `status` tinyint(4) NOT NULL DEFAULT '-2' COMMENT '运行状态 -2：待处理 1：成功 0：失败',
+  `updated_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_status` (`status`),
+  KEY `idx_created_time` (`created_time`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='job报警列表';
+
 CREATE TABLE `job_kill_queue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `job_id` int(11) NOT NULL DEFAULT '0' COMMENT 'job的id',
