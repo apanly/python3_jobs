@@ -10,3 +10,4 @@ config/hsh_setting.py
 config/pro_setting.py
 config/test_setting.py
 config/*_production_setting.py
+jobs/tasks/test.py
