@@ -151,6 +151,7 @@ class JobTask( BaseJob ):
                 2 子进程不存在
                 -15 kill
                 None 在运行
+                判断进程状态
                 '''
                 while sp.poll() is None:
                     ##统计内存占用量
@@ -158,16 +159,11 @@ class JobTask( BaseJob ):
                     if tmp_job_used_mem > tmp_max_job_used_mem:
                         tmp_max_job_used_mem = tmp_job_used_mem
 
-                    # 换一种读取缓冲区内容的方式
-                    # sp.stdout.read(400)
-                    # sp.stdout.readline()
                     tmp_line_output = sp.stdout.readline()
                     tmp_line_output = tmp_line_output.strip()
                     #返回的是bytes
                     tmp_line_output = str(tmp_line_output, encoding="utf8")
-                    #if not tmp_line_output:
-                    #    app.logger.info( "job_id:%s output break" % (job_id) )
-                    #    break
+
                     tmp_lines = tmp_line_output.split("\n")
                     for tmp_line in tmp_lines:
                         app.logger.info("job_id:%s %s" % (job_id, tmp_line) )
