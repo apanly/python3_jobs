@@ -144,7 +144,15 @@ class JobTask( BaseJob ):
                 ##统计内存占用量
                 tmp_max_job_used_mem = tmp_job_used_mem = UtilHelper.getUsedMemory( tmp_run_job_pid )
                 app.logger.info("job_id:%s 日志start-------" %job_id )
-                while True:
+                '''
+                sp.poll() 返回值
+                0 正常结束
+                1 sleep
+                2 子进程不存在
+                -15 kill
+                None 在运行
+                '''
+                while sp.poll() is None:
                     ##统计内存占用量
                     tmp_job_used_mem = UtilHelper.getUsedMemory( tmp_run_job_pid )
                     if tmp_job_used_mem > tmp_max_job_used_mem:
@@ -157,9 +165,9 @@ class JobTask( BaseJob ):
                     tmp_line_output = tmp_line_output.strip()
                     #返回的是bytes
                     tmp_line_output = str(tmp_line_output, encoding="utf8")
-                    if not tmp_line_output:
-                        app.logger.info( "job_id:%s output break" % (job_id) )
-                        break
+                    #if not tmp_line_output:
+                    #    app.logger.info( "job_id:%s output break" % (job_id) )
+                    #    break
                     tmp_lines = tmp_line_output.split("\n")
                     for tmp_line in tmp_lines:
                         app.logger.info("job_id:%s %s" % (job_id, tmp_line) )
